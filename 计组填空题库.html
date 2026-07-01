@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>计算机组成原理 · 填空题库</title>
+<style>
+:root {
+  --c-bg: #f5f6f8;
+  --c-white: #ffffff;
+  --c-sidebar: #fafbfc;
+  --c-border: #e8eaed;
+  --c-text: #1f2937;
+  --c-text-secondary: #6b7280;
+  --c-text-muted: #9ca3af;
+  --c-primary: #3266cc;
+  --c-primary-light: #eef2fb;
+  --c-primary-hover: #2554b5;
+  --c-accent: #eb6f40;
+  --c-green: #16a34a;
+  --c-green-light: #f0fdf4;
+  --c-green-border: #bbf7d0;
+  --c-done: #16a34a;
+  --c-done-bg: #f0fdf4;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-elevated: 0 4px 12px rgba(0,0,0,0.08);
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--c-bg);
+  color: var(--c-text);
+  display: flex; height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 侧边栏 ===== */
+.sidebar {
+  width: 400px; min-width: 400px; max-width: 400px;
+  background: var(--c-sidebar);
+  border-right: 1px solid var(--c-border);
+  display: flex; flex-direction: column;
+  box-shadow: 1px 0 0 rgba(0,0,0,0.03);
+}
+
+.sidebar-top {
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid var(--c-border);
+}
+.sidebar-top h1 {
+  font-size: 18px; font-weight: 700; color: var(--c-text);
+  letter-spacing: -0.01em;
+}
+.sidebar-top h1 span { color: var(--c-primary); }
+.sidebar-top .sub {
+  font-size: 12px; color: var(--c-text-muted); margin-top: 3px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-top .sub .progress-dot {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--c-green); margin-right: 2px;
+}
+.sidebar-top .sub .progress-dot.pending { background: #d1d5db; }
+
+.search-bar {
+  padding: 10px 20px; position: relative;
+}
+.search-bar input {
+  width: 100%; padding: 9px 14px 9px 34px;
+  border: 1px solid var(--c-border); border-radius: var(--radius-sm);
+  font-size: 13px; font-family: var(--font-sans); color: var(--c-text);
+  background: var(--c-white); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-bar input::placeholder { color: var(--c-text-muted); }
+.search-bar input:focus {
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px var(--c-primary-light);
+}
+.search-bar .s-icon {
+  position: absolute; left: 32px; top: 50%; transform: translateY(-50%);
+  width: 15px; height: 15px; pointer-events: none;
+}
+
+.nav-list { flex: 1; overflow-y: auto; padding: 6px 0; }
+.nav-list::-webkit-scrollbar { width: 4px; }
+.nav-list::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
+
+.chapter { margin-bottom: 2px; }
+.chapter-title {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 20px; cursor: pointer; user-select: none;
+  font-size: 13px; font-weight: 600; color: var(--c-text);
+  transition: background 0.15s;
+}
+.chapter-title:hover { background: var(--c-primary-light); }
+.chapter-title .arrow {
+  font-size: 10px; transition: transform 0.2s; color: var(--c-text-muted);
+  display: inline-block; width: 14px; text-align: center;
+}
+.chapter-title.collapsed .arrow { transform: rotate(-90deg); }
+.chapter-title .count { font-size: 11px; color: var(--c-text-muted); font-weight: 400; margin-left: auto; }
+
+.chapter-questions { overflow: hidden; transition: max-height 0.3s ease; }
+.chapter-questions.collapsed { max-height: 0 !important; }
+
+.q-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 8px 20px 8px 34px; cursor: pointer;
+  font-size: 12.5px; color: var(--c-text-secondary);
+  border-left: 3px solid transparent; transition: all 0.15s;
+  line-height: 1.55; word-break: break-all;
+}
+.q-row:hover { background: #f0f3f8; color: var(--c-text); }
+.q-row.active {
+  background: var(--c-primary-light);
+  border-left-color: var(--c-primary);
+  color: var(--c-primary); font-weight: 500;
+}
+.q-row .q-id {
+  font-size: 11px; font-weight: 600; color: var(--c-text-muted);
+  background: #eef1f5; border-radius: 4px; padding: 1px 6px;
+  flex-shrink: 0; min-width: 28px; text-align: center;
+  margin-top: 1px;
+}
+.q-row.active .q-id { background: var(--c-primary); color: #fff; }
+.q-row .q-check {
+  display: none; color: var(--c-green); font-size: 13px;
+  flex-shrink: 0; margin-left: auto; font-weight: 700;
+  margin-top: 1px;
+}
+.q-row.done .q-check { display: inline; }
+.q-row.done { background: #f0fdf4; color: var(--c-text-secondary); }
+.q-row.done:hover { background: #dcfce7; }
+.q-row.no-match { display: none; }
+
+.sidebar-bottom {
+  padding: 10px 20px; border-top: 1px solid var(--c-border);
+  font-size: 12px; color: var(--c-text-muted);
+  display: flex; gap: 12px; align-items: center;
+}
+.sidebar-bottom strong { color: var(--c-primary); font-weight: 600; }
+.sidebar-bottom .done-info { color: var(--c-green); }
+
+/* ===== 主区域 ===== */
+.main-area {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  padding: 32px; min-width: 0;
+}
+
+.quiz-card {
+  width: 100%; max-width: 700px;
+  background: var(--c-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.quiz-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--c-border);
+  background: #fafbfc;
+}
+.quiz-head .chapter-tag {
+  font-size: 12px; font-weight: 600; color: var(--c-primary);
+  background: var(--c-primary-light); padding: 4px 12px;
+  border-radius: 20px;
+}
+.quiz-head .stats { display: flex; gap: 18px; }
+.quiz-head .stat-item { font-size: 12px; color: var(--c-text-secondary); }
+.quiz-head .stat-item b { color: var(--c-primary); font-size: 16px; margin: 0 2px; }
+
+.quiz-content { padding: 28px 32px 24px; }
+
+.quiz-num {
+  font-size: 28px; font-weight: 800; color: var(--c-text);
+  margin-bottom: 14px; letter-spacing: -0.02em;
+}
+.quiz-num em { font-style: normal; color: var(--c-primary); }
+
+.quiz-stem {
+  font-size: 16px; line-height: 1.9; color: var(--c-text);
+  margin-bottom: 24px; letter-spacing: 0.01em;
+}
+.quiz-stem .blank {
+  display: inline-block; min-width: 60px;
+  border-bottom: 2.5px solid var(--c-accent);
+  margin: 0 4px; padding: 1px 8px;
+  color: var(--c-accent); font-weight: 500;
+  outline: none; cursor: text; vertical-align: baseline;
+  transition: border-color 0.2s, color 0.2s;
+  font-size: 15px; line-height: 1.5;
+}
+.quiz-stem .blank:focus {
+  border-bottom-color: var(--c-primary);
+  color: var(--c-primary);
+}
+
+.answer-section { margin-bottom: 6px; }
+.answer-section label {
+  display: block; font-size: 12px; font-weight: 600; color: var(--c-text-muted);
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;
+}
+.answer-section textarea {
+  width: 100%; padding: 12px 16px; border: 1.5px solid var(--c-border);
+  border-radius: var(--radius-sm); font-size: 14px; min-height: 56px;
+  font-family: var(--font-sans); color: var(--c-text);
+  background: #fafbfc; resize: none; outline: none;
+  line-height: 1.6; transition: border-color 0.2s, box-shadow 0.2s;
+}
+.answer-section textarea:focus {
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px var(--c-primary-light);
+  background: #fff;
+}
+.answer-section textarea::placeholder { color: #c4c9d0; }
+
+.ref-box {
+  margin-top: 16px; padding: 16px 20px;
+  background: var(--c-green-light);
+  border: 1px solid var(--c-green-border);
+  border-radius: var(--radius-md);
+  display: none;
+}
+.ref-box.show { display: block; }
+.ref-box .ref-label {
+  font-size: 11px; font-weight: 700; color: var(--c-green);
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
+}
+.ref-box .ref-text { font-size: 15px; color: var(--c-text); line-height: 1.7; }
+
+.quiz-foot {
+  padding: 0 32px 20px; display: flex; align-items: center; gap: 10px;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 20px; border-radius: var(--radius-sm);
+  font-size: 14px; font-family: var(--font-sans); font-weight: 500;
+  cursor: pointer; border: none; outline: none;
+  transition: all 0.2s; letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.btn:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+
+.btn-primary {
+  background: var(--c-primary); color: #fff;
+  box-shadow: 0 1px 2px rgba(50,102,204,0.3);
+}
+.btn-primary:hover { background: var(--c-primary-hover); box-shadow: 0 2px 6px rgba(50,102,204,0.35); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  background: #fff; color: var(--c-primary);
+  border: 1.5px solid var(--c-primary);
+}
+.btn-secondary:hover { background: var(--c-primary-light); }
+.btn-secondary:active { background: #dce4f8; }
+
+.btn-ghost {
+  background: transparent; color: var(--c-text-muted);
+}
+.btn-ghost:hover { color: var(--c-text); background: #f3f4f6; }
+
+.btn-home {
+  background: var(--c-green-light); color: var(--c-green);
+  border: 1.5px solid var(--c-green-border);
+  text-decoration: none;
+}
+.btn-home:hover { background: #dcfce7; }
+
+.kbd-row {
+  font-size: 11px; color: var(--c-text-muted);
+  flex: 1 0 100%;
+  margin-right: auto; display: flex; gap: 8px; align-items: center;
+}
+.kbd-row kbd {
+  display: inline-block; padding: 2px 7px;
+  background: #f3f4f6; border: 1px solid #e5e7eb;
+  border-radius: 4px; font-size: 11px; font-family: var(--font-sans);
+  box-shadow: 0 1px 0 #e5e7eb;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 900px) {
+  body { flex-direction: column; }
+  .sidebar { width: 100%; min-width: 100%; max-width: 100%; max-height: 40vh; }
+  .main-area { padding: 20px 12px; }
+  .quiz-foot { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <h1>计算机<span>组成</span>原理</h1>
+    <div class="sub" id="subInfo">填空题库 · 期末复习</div>
+  </div>
+  <div class="search-bar">
+    <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="searchInput" placeholder="搜索题目…">
+  </div>
+  <nav class="nav-list" id="navList"></nav>
+  <div class="sidebar-bottom">
+    <span>共 <strong>30</strong> 题</span>
+    <span class="done-info" id="doneCount">已看 <strong>0</strong> 题</span>
+  </div>
+</aside>
+
+<main class="main-area">
+  <div class="quiz-card">
+    <div class="quiz-head">
+      <div class="chapter-tag" id="chapterTag">第一章</div>
+      <div class="stats">
+        <div class="stat-item">已答 <b id="answeredVal">0</b> 题</div>
+        <div class="stat-item">已看答案 <b id="revealedVal">0</b> 次</div>
+      </div>
+    </div>
+    <div class="quiz-content">
+      <div class="quiz-num">第 <em id="qNum">1</em> 题</div>
+      <div class="quiz-stem" id="qStem"></div>
+      <div class="answer-section">
+        <label>你的答案</label>
+        <textarea id="userAnswer" placeholder="多个空请用中文逗号分隔，如：运算器、存储器"></textarea>
+      </div>
+      <div class="ref-box" id="refBox">
+        <div class="ref-label">参考答案</div>
+        <div class="ref-text" id="refText"></div>
+      </div>
+    </div>
+    <div class="quiz-foot">
+      <div class="kbd-row"><kbd>→</kbd> 下一题 <kbd>Space</kbd> 看答案</div>
+      <a class="btn btn-home" href="./index.html">返回主页</a>
+      <button class="btn btn-ghost" id="btnReset">重置进度</button>
+      <button class="btn btn-secondary" id="btnReveal">查看答案</button>
+      <button class="btn btn-secondary" id="btnNext">下一题</button>
+      <button class="btn btn-primary" id="btnRandom">随机抽题</button>
+    </div>
+  </div>
+</main>
+
+<script>
+const POOL = [
+  { id:1,  ch:"第一章 计算机系统概论",         q:"计算机各组成部件相互连接方式，从早期的以（_____）中心，发展到现在的以（_____）为中心。", a:"运算器、存储器" },
+  { id:2,  ch:"第一章 计算机系统概论",         q:"冯·诺依曼机器结构由①_____、②_____、③_____、④_____和⑤_____五大部分组成。", a:"运算器、控制器、存储器、输入设备、输出设备" },
+  { id:3,  ch:"第一章 计算机系统概论",         q:"可由硬件直接识别和执行的语言是（_____）。", a:"机器语言" },
+  { id:4,  ch:"第三章 系统总线",               q:"总线通信常用的有_____、_____、_____、_____四种方式。", a:"同步通信、异步通信、半同步通信、分离式通信" },
+  { id:5,  ch:"第三章 系统总线",               q:"在集中式总线仲裁中，_____响应时间最快。_____对电路故障最敏感。", a:"独立请求方式、链式查询方式" },
+  { id:6,  ch:"第三章 系统总线",               q:"总线控制方式分为_____与_____两类。", a:"集中式、分布式" },
+  { id:7,  ch:"第三章 系统总线",               q:"集中式总线控制主要有_____、_____和_____方式。", a:"链式查询、计数器定时查询、独立请求方式" },
+  { id:8,  ch:"第三章 系统总线",               q:"在总线的异步通信方式中，通信的双方可以通过（_____）、（_____）和（_____）三种类型联络。", a:"不互锁、半互锁、全互锁" },
+  { id:9,  ch:"第四章 存储器",                 q:"存储器在计算机中的主要功能是存储_____和_____。", a:"程序、数据" },
+  { id:10, ch:"第四章 存储器",                 q:"动态RAM靠_____的原理存储信息，因此一般在_____时间内必须刷新一次，刷新与_____地址有关，该地址由_____给出。", a:"电容存储电荷、2ms、行、刷新地址计数器" },
+  { id:11, ch:"第四章 存储器",                 q:"动态RAM常用的三种刷新方式包括（_____）、（_____）、（_____）。", a:"集中刷新、分散刷新、异步刷新" },
+  { id:12, ch:"第四章 存储器",                 q:"引入cache的目的是弥补CPU与主存间存在的_____。", a:"速度差" },
+  { id:13, ch:"第四章 存储器",                 q:"常用的替换算法有_____、_____和_____三种。", a:"先进先出（FIFO）、近期最少使用（LRU）、随机替换" },
+  { id:14, ch:"第五章 输入输出系统",            q:"常用的I/O控制方式有（_____）、（_____）、（_____）、（_____）和（_____）五种。", a:"程序查询方式、程序中断方式、DMA方式、通道方式、I/O处理机方式" },
+  { id:15, ch:"第五章 输入输出系统",            q:"CPU对I/O的编址方式有（_____）与（_____）两种。", a:"统一编址、独立编址" },
+  { id:16, ch:"第五章 输入输出系统",            q:"中断隐指令的主要功能是（_____）、（_____）和（_____）。", a:"保护程序断点、寻找服务程序入口地址、硬件关中断" },
+  { id:17, ch:"第五章 输入输出系统",            q:"在DMA方式中，CPU和DMA控制器通常采用三种方法来分时使用主存，它们是（_____）、（_____）和（_____）。", a:"停止CPU访问主存、周期挪用（周期窃取）、DMA与CPU交替访存" },
+  { id:18, ch:"第六章 计算机的运算方法",        q:"完成浮点加、减法运算一般要经过（_____）、（_____）、（_____）、（_____）和（_____）五步。", a:"对阶、尾数求和、规格化、舍入、判溢出" },
+  { id:19, ch:"第六章 计算机的运算方法",        q:"引入先行进位概念的目的是提高_____。", a:"运算速度" },
+  { id:20, ch:"第七章 指令系统",               q:"设指令字长等于存储字长，均为24位，若某指令系统可完成108种操作，操作码长度固定，且具有直接、间接（一次间址）、变址、基址、相对、立即寻址方式，则在保证最大范围内直接寻址的前提下，指令字中操作码占_____位，寻址特征位占_____位，可直接寻址的范围是_____，一次间址的范围是_____。", a:"7、3、2^14、2^24" },
+  { id:21, ch:"第七章 指令系统",               q:"指令寻址的基本方式有两种，一种是_____寻址方式，其指令地址由_____给出，另一种是_____寻址方式，其指令地址由_____给出。", a:"顺序、程序计数器、跳跃、指令本身" },
+  { id:22, ch:"第七章 指令系统",               q:"变址寻址和基址寻址的区别是：在基址寻址中，基址寄存器提供_____，指令中形式地址提供_____；而在变址寻址中，变址寄存器提供_____，指令中形式地址提供_____。", a:"基地址、偏移量、偏移量、基地址" },
+  { id:23, ch:"第八章 CPU的结构和功能",         q:"指令周期是指（_____）。", a:"CPU取出并执行一条指令所需的全部时间" },
+  { id:24, ch:"第八章 CPU的结构和功能",         q:"完成一条指令一般分为_____周期和_____周期。", a:"取指、执行" },
+  { id:25, ch:"第十章 控制单元的设计",          q:"在组合逻辑控制器中，微操作控制信号由_____、_____和_____决定。", a:"指令操作码、时序、状态条件" },
+  { id:26, ch:"第十章 控制单元的设计",          q:"微指令格式可分为_____型和_____型两类，其中_____型微指令用较长的微程序结构换取较短的微指令结构。其中_____型微指令用较短的微程序结构换取较短的微指令结构。", a:"水平型微指令、垂直型微指令、垂直、水平" },
+  { id:27, ch:"第十章 控制单元的设计",          q:"当指令取至指令寄存器后，每一条机器指令的微程序入口地址是根据_____通过_____形成的。", a:"操作码、微地址形成部件" },
+  { id:28, ch:"第十章 控制单元的设计",          q:"在微程序控制器中，一条机器指令对应一个微程序，若某机有38条机器指令，通常可对应_____个微程序。", a:"41" },
+  { id:29, ch:"第十章 控制单元的设计",          q:"假设微指令的操作控制字段共18位，若采用直接控制，则一条微指令最多可同时启动_____个微操作命令。若采用字段直接编码控制，并要求一条微指令能同时启动3个微操作，则微指令的操作控制字段应分_____段，若每个字段的微操作数相同，这样的微指令格式最多可包含_____个微操作命令。", a:"18、3、189" },
+  { id:30, ch:"第十章 控制单元的设计",          q:"某机微指令格式中共有6个控制字段，每个字段分别激活4、7、3、11、9、16种控制信号，采用直接编码方式，微指令的操作控制字段应取_____位，采用字段直接编码方式，微指令的操作控制字段应取_____位。", a:"50、21" }
+];
+
+let cur = null;
+let answeredCount = 0;
+let revealedCount = 0;
+let isRevealed = false;
+let doneSet = new Set(); // 已看过答案的题目ID集合
+
+function updateSidebarStats() {
+  document.getElementById("doneCount").innerHTML = `已看 <strong>${doneSet.size}</strong> 题`;
+}
+
+/* 导航 */
+function renderNav(f) {
+  const nav = document.getElementById("navList");
+  const grp = {};
+  POOL.forEach(q => { if (!grp[q.ch]) grp[q.ch] = []; grp[q.ch].push(q); });
+  let h = "";
+  for (const [ch, qs] of Object.entries(grp)) {
+    const vis = qs.filter(q => !f || q.q.includes(f) || q.a.includes(f));
+    if (!vis.length && f) continue;
+    h += `<div class="chapter"><div class="chapter-title" onclick="toggleCh(this)"><span class="arrow">▼</span>${ch}<span class="count">${vis.length}/${qs.length}</span></div>`;
+    h += `<div class="chapter-questions" style="max-height:${Math.max(vis.length*56,56)}px">`;
+    qs.forEach(q => {
+      const m = !f || q.q.includes(f) || q.a.includes(f);
+      const act = cur && cur.id===q.id ? " active" : "";
+      const hd = f && !m ? " no-match" : "";
+      const dn = doneSet.has(q.id) ? " done" : "";
+      h += `<div class="q-row${act}${hd}${dn}" onclick="pick(${q.id})" data-id="${q.id}"><span class="q-id">${q.id}</span>${esc(q.q.replace(/_____/g,"…").slice(0,36))}…<span class="q-check">✓</span></div>`;
+    });
+    h += `</div></div>`;
+  }
+  nav.innerHTML = h || `<div style="text-align:center;padding:40px;color:#9ca3af;">无匹配题目</div>`;
+}
+function toggleCh(el) {
+  el.classList.toggle("collapsed");
+  const n = el.nextElementSibling;
+  if (n) n.classList.toggle("collapsed");
+}
+function esc(s) { const d=document.createElement("div");d.textContent=s;return d.innerHTML; }
+
+/* 答题 */
+function render(q) {
+  cur = q; isRevealed = false;
+  document.getElementById("chapterTag").textContent = q.ch;
+  document.getElementById("qNum").textContent = q.id;
+
+  const p = q.q.split("_____");
+  let s = "";
+  p.forEach((t,i) => { s+=esc(t); if(i<p.length-1) s+=`<span class="blank" contenteditable="true" data-blank="${i}"></span>`; });
+  document.getElementById("qStem").innerHTML = s;
+  document.getElementById("userAnswer").value = "";
+  document.getElementById("refBox").classList.remove("show");
+  document.getElementById("refText").textContent = "";
+  document.getElementById("answeredVal").textContent = answeredCount;
+  document.getElementById("revealedVal").textContent = revealedCount;
+
+  document.querySelectorAll(".q-row").forEach(e=>e.classList.remove("active"));
+  const t=document.querySelector(`.q-row[data-id="${q.id}"]`);
+  if(t){t.classList.add("active");t.scrollIntoView({block:"nearest",behavior:"smooth"});}
+}
+
+function pick(id) { const q = POOL.find(x=>x.id===id); if(q) render(q); }
+
+/* 随机抽题 */
+function rand() { render(POOL[Math.floor(Math.random()*POOL.length)]); }
+
+/* 顺序下一题 */
+function nextInOrder() {
+  if (!cur) { rand(); return; }
+  const idx = POOL.findIndex(x => x.id === cur.id);
+  const nextIdx = (idx + 1) % POOL.length;
+  render(POOL[nextIdx]);
+}
+
+/* 查看答案 */
+function revealAns() {
+  if(!cur) return;
+  if(!isRevealed){revealedCount++;isRevealed=true;}
+  answeredCount++;
+  // 标记已看
+  doneSet.add(cur.id);
+  updateSidebarStats();
+  document.getElementById("revealedVal").textContent=revealedCount;
+  document.getElementById("answeredVal").textContent=answeredCount;
+  document.getElementById("refText").textContent=cur.a;
+  document.getElementById("refBox").classList.add("show");
+  // 刷新导航里的勾
+  renderNav(document.getElementById("searchInput").value);
+  // 重新高亮当前题
+  const t=document.querySelector(`.q-row[data-id="${cur.id}"]`);
+  if(t) t.classList.add("active");
+}
+
+/* 绑定 */
+document.getElementById("btnRandom").addEventListener("click",rand);
+document.getElementById("btnNext").addEventListener("click",nextInOrder);
+document.getElementById("btnReveal").addEventListener("click",revealAns);
+document.getElementById("btnReset").addEventListener("click",()=>{
+  answeredCount=0;revealedCount=0;isRevealed=false;
+  doneSet.clear(); updateSidebarStats();
+  document.getElementById("answeredVal").textContent="0";
+  document.getElementById("revealedVal").textContent="0";
+  if(cur) render(cur);
+  renderNav(document.getElementById("searchInput").value);
+  if(cur){const t=document.querySelector(`.q-row[data-id="${cur.id}"]`);if(t)t.classList.add("active");}
+});
+document.getElementById("searchInput").addEventListener("input",e=>renderNav(e.target.value));
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight"&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&document.activeElement===document.body){e.preventDefault();nextInOrder();}
+  if(e.key===" "&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&document.activeElement===document.body){e.preventDefault();revealAns();}
+});
+
+renderNav(); rand();
+</script>
+</body>
+</html>
