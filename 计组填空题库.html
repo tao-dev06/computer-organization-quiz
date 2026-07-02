@@ -3,496 +3,5141 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>计算机组成原理 · 填空题库</title>
+<title>计算机组成原理 · 题库答题系统</title>
 <style>
 :root {
-  --c-bg: #f5f6f8;
-  --c-white: #ffffff;
-  --c-sidebar: #fafbfc;
-  --c-border: #e8eaed;
-  --c-text: #1f2937;
-  --c-text-secondary: #6b7280;
-  --c-text-muted: #9ca3af;
-  --c-primary: #3266cc;
-  --c-primary-light: #eef2fb;
-  --c-primary-hover: #2554b5;
-  --c-accent: #eb6f40;
-  --c-green: #16a34a;
-  --c-green-light: #f0fdf4;
-  --c-green-border: #bbf7d0;
-  --c-done: #16a34a;
-  --c-done-bg: #f0fdf4;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-elevated: 0 4px 12px rgba(0,0,0,0.08);
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --bg: #f4f6f8;
+  --panel: #ffffff;
+  --panel-soft: #f8fafc;
+  --line: #dfe5ec;
+  --line-strong: #c7d0dc;
+  --text: #172033;
+  --muted: #667085;
+  --faint: #98a2b3;
+  --blue: #2854c5;
+  --blue-soft: #edf2ff;
+  --teal: #0f8f88;
+  --teal-soft: #e8f7f5;
+  --amber: #a86416;
+  --green: #15803d;
+  --green-soft: #eaf8ef;
+  --red: #c03232;
+  --red-soft: #fff0f0;
+  --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
 }
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
 body {
-  font-family: var(--font-sans);
-  background: var(--c-bg);
-  color: var(--c-text);
-  display: flex; height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(320px, 400px) minmax(0, 1fr);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
   -webkit-font-smoothing: antialiased;
 }
-
-/* ===== 侧边栏 ===== */
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
 .sidebar {
-  width: 400px; min-width: 400px; max-width: 400px;
-  background: var(--c-sidebar);
-  border-right: 1px solid var(--c-border);
-  display: flex; flex-direction: column;
-  box-shadow: 1px 0 0 rgba(0,0,0,0.03);
+  min-width: 0;
+  background: var(--panel-soft);
+  border-right: 1px solid var(--line);
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  height: 100vh;
 }
-
-.sidebar-top {
-  padding: 18px 20px 12px;
-  border-bottom: 1px solid var(--c-border);
+.sidebar-head { padding: 18px 20px 12px; border-bottom: 1px solid var(--line); }
+.title-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+h1 { margin: 0; font-size: 18px; line-height: 1.3; letter-spacing: 0; }
+.home-link { color: var(--muted); text-decoration: none; font-size: 13px; padding: 7px 9px; border-radius: 6px; }
+.home-link:hover { color: var(--blue); background: var(--blue-soft); }
+.subline { margin-top: 6px; color: var(--muted); font-size: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+.mode-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px 20px; border-bottom: 1px solid var(--line); }
+.mode-tab {
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--muted);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
-.sidebar-top h1 {
-  font-size: 18px; font-weight: 700; color: var(--c-text);
-  letter-spacing: -0.01em;
+.mode-tab small { font-weight: 600; color: var(--faint); }
+.mode-tab.active { color: #fff; background: var(--blue); border-color: var(--blue); box-shadow: 0 8px 20px rgba(40, 84, 197, 0.18); }
+.mode-tab.active small { color: rgba(255,255,255,0.78); }
+.search-wrap { padding: 10px 20px; position: relative; }
+.search-wrap input {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px 0 34px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  color: var(--text);
+  font-size: 13px;
 }
-.sidebar-top h1 span { color: var(--c-primary); }
-.sidebar-top .sub {
-  font-size: 12px; color: var(--c-text-muted); margin-top: 3px;
-  display: flex; align-items: center; gap: 10px;
-}
-.sidebar-top .sub .progress-dot {
-  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
-  background: var(--c-green); margin-right: 2px;
-}
-.sidebar-top .sub .progress-dot.pending { background: #d1d5db; }
-
-.search-bar {
-  padding: 10px 20px; position: relative;
-}
-.search-bar input {
-  width: 100%; padding: 9px 14px 9px 34px;
-  border: 1px solid var(--c-border); border-radius: var(--radius-sm);
-  font-size: 13px; font-family: var(--font-sans); color: var(--c-text);
-  background: var(--c-white); outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.search-bar input::placeholder { color: var(--c-text-muted); }
-.search-bar input:focus {
-  border-color: var(--c-primary);
-  box-shadow: 0 0 0 3px var(--c-primary-light);
-}
-.search-bar .s-icon {
-  position: absolute; left: 32px; top: 50%; transform: translateY(-50%);
-  width: 15px; height: 15px; pointer-events: none;
-}
-
-.nav-list { flex: 1; overflow-y: auto; padding: 6px 0; }
-.nav-list::-webkit-scrollbar { width: 4px; }
-.nav-list::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 2px; }
-
-.chapter { margin-bottom: 2px; }
+.search-wrap input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
+.search-wrap svg { position: absolute; left: 31px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--faint); pointer-events: none; }
+.nav-list { overflow: auto; padding: 6px 0 10px; }
+.nav-list::-webkit-scrollbar { width: 6px; }
+.nav-list::-webkit-scrollbar-thumb { background: #ccd4df; border-radius: 999px; }
+.chapter { margin: 2px 0; }
 .chapter-title {
-  display: flex; align-items: center; gap: 6px;
-  padding: 8px 20px; cursor: pointer; user-select: none;
-  font-size: 13px; font-weight: 600; color: var(--c-text);
-  transition: background 0.15s;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 20px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+  user-select: none;
 }
-.chapter-title:hover { background: var(--c-primary-light); }
-.chapter-title .arrow {
-  font-size: 10px; transition: transform 0.2s; color: var(--c-text-muted);
-  display: inline-block; width: 14px; text-align: center;
-}
-.chapter-title.collapsed .arrow { transform: rotate(-90deg); }
-.chapter-title .count { font-size: 11px; color: var(--c-text-muted); font-weight: 400; margin-left: auto; }
-
-.chapter-questions { overflow: hidden; transition: max-height 0.3s ease; }
-.chapter-questions.collapsed { max-height: 0 !important; }
-
+.chapter-title .count { margin-left: auto; color: var(--faint); font-size: 11px; font-weight: 700; }
+.chapter-arrow { color: var(--faint); transition: transform .16s ease; width: 12px; }
+.chapter.collapsed .chapter-arrow { transform: rotate(-90deg); }
+.chapter.collapsed .question-list { display: none; }
 .q-row {
-  display: flex; align-items: flex-start; gap: 8px;
-  padding: 8px 20px 8px 34px; cursor: pointer;
-  font-size: 12.5px; color: var(--c-text-secondary);
-  border-left: 3px solid transparent; transition: all 0.15s;
-  line-height: 1.55; word-break: break-all;
+  width: 100%;
+  border: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 20px 8px 34px;
+  border-left: 3px solid transparent;
+  color: var(--muted);
+  background: transparent;
+  font-size: 12.5px;
+  line-height: 1.45;
+  text-align: left;
 }
-.q-row:hover { background: #f0f3f8; color: var(--c-text); }
-.q-row.active {
-  background: var(--c-primary-light);
-  border-left-color: var(--c-primary);
-  color: var(--c-primary); font-weight: 500;
+.q-row:hover { background: #eef3f8; color: var(--text); }
+.q-row.active { background: var(--blue-soft); border-left-color: var(--blue); color: var(--blue); }
+.q-row.done { color: #475467; }
+.q-row.correct { background: rgba(21, 128, 61, .06); }
+.q-row.wrong { background: rgba(192, 50, 50, .055); }
+.q-id {
+  min-width: 36px;
+  text-align: center;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: #e9eef4;
+  color: #667085;
+  font-size: 11px;
+  font-weight: 800;
 }
-.q-row .q-id {
-  font-size: 11px; font-weight: 600; color: var(--c-text-muted);
-  background: #eef1f5; border-radius: 4px; padding: 1px 6px;
-  flex-shrink: 0; min-width: 28px; text-align: center;
-  margin-top: 1px;
+.q-row.active .q-id { background: var(--blue); color: #fff; }
+.q-status { font-size: 12px; font-weight: 900; }
+.q-status.fill { color: var(--teal); }
+.q-status.correct { color: var(--green); }
+.q-status.wrong { color: var(--red); }
+.empty { padding: 38px 20px; color: var(--faint); text-align: center; font-size: 13px; }
+.sidebar-foot {
+  min-height: 52px;
+  border-top: 1px solid var(--line);
+  padding: 10px 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  color: var(--muted);
+  font-size: 12px;
 }
-.q-row.active .q-id { background: var(--c-primary); color: #fff; }
-.q-row .q-check {
-  display: none; color: var(--c-green); font-size: 13px;
-  flex-shrink: 0; margin-left: auto; font-weight: 700;
-  margin-top: 1px;
-}
-.q-row.done .q-check { display: inline; }
-.q-row.done { background: #f0fdf4; color: var(--c-text-secondary); }
-.q-row.done:hover { background: #dcfce7; }
-.q-row.no-match { display: none; }
-
-.sidebar-bottom {
-  padding: 10px 20px; border-top: 1px solid var(--c-border);
-  font-size: 12px; color: var(--c-text-muted);
-  display: flex; gap: 12px; align-items: center;
-}
-.sidebar-bottom strong { color: var(--c-primary); font-weight: 600; }
-.sidebar-bottom .done-info { color: var(--c-green); }
-
-/* ===== 主区域 ===== */
-.main-area {
-  flex: 1; display: flex; align-items: center; justify-content: center;
-  padding: 32px; min-width: 0;
-}
-
-.quiz-card {
-  width: 100%; max-width: 700px;
-  background: var(--c-white);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
-}
-
+.sidebar-foot strong { color: var(--blue); }
+.main { min-width: 0; height: 100vh; overflow: auto; padding: 30px; display: flex; align-items: center; justify-content: center; }
+.quiz-card { width: min(820px, 100%); background: #fff; border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden; }
 .quiz-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 28px;
-  border-bottom: 1px solid var(--c-border);
-  background: #fafbfc;
+  min-height: 66px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, #fff, #f8fafc);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
-.quiz-head .chapter-tag {
-  font-size: 12px; font-weight: 600; color: var(--c-primary);
-  background: var(--c-primary-light); padding: 4px 12px;
-  border-radius: 20px;
+.tagline { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.bank-tag { color: var(--blue); font-size: 12px; font-weight: 900; }
+.chapter-tag { color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stats { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.stat { min-height: 30px; display: inline-flex; align-items: center; gap: 4px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); background: #fff; font-size: 12px; }
+.stat b { color: var(--text); font-size: 15px; }
+.quiz-body { padding: 26px 28px 22px; }
+.qnum { margin: 0 0 14px; font-size: 28px; line-height: 1.2; letter-spacing: 0; }
+.qnum span { color: var(--blue); }
+.stem { font-size: 16px; line-height: 1.9; color: var(--text); word-break: break-word; }
+.blank-line { display: inline-block; min-width: 64px; border-bottom: 2px solid var(--amber); margin: 0 5px; color: var(--amber); font-weight: 800; vertical-align: baseline; }
+.answer-box { margin-top: 22px; }
+.answer-box label { display: block; color: var(--muted); font-size: 12px; font-weight: 900; margin-bottom: 8px; }
+.answer-box textarea { width: 100%; min-height: 86px; resize: vertical; border: 1px solid var(--line); border-radius: 8px; outline: none; padding: 12px 14px; color: var(--text); background: #fbfcfe; line-height: 1.6; }
+.answer-box textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); background: #fff; }
+.ref-box, .result-box { margin-top: 18px; padding: 15px 16px; border-radius: 8px; display: none; line-height: 1.65; }
+.ref-box.show, .result-box.show { display: block; }
+.ref-box { background: var(--teal-soft); border: 1px solid #bfe5e0; }
+.result-box.correct { background: var(--green-soft); border: 1px solid #bde9ca; }
+.result-box.wrong { background: var(--red-soft); border: 1px solid #f1c0c0; }
+.box-label { font-size: 12px; font-weight: 900; margin-bottom: 6px; }
+.ref-box .box-label { color: var(--teal); }
+.answer-list { margin: 0; padding-left: 22px; }
+.answer-list li { margin: 3px 0; }
+.answer-single { font-weight: 700; }
+.result-box.correct .box-label { color: var(--green); }
+.result-box.wrong .box-label { color: var(--red); }
+.choice-options { display: grid; gap: 10px; margin-top: 22px; }
+.option {
+  width: 100%;
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  padding: 10px 13px;
 }
-.quiz-head .stats { display: flex; gap: 18px; }
-.quiz-head .stat-item { font-size: 12px; color: var(--c-text-secondary); }
-.quiz-head .stat-item b { color: var(--c-primary); font-size: 16px; margin: 0 2px; }
-
-.quiz-content { padding: 28px 32px 24px; }
-
-.quiz-num {
-  font-size: 28px; font-weight: 800; color: var(--c-text);
-  margin-bottom: 14px; letter-spacing: -0.02em;
-}
-.quiz-num em { font-style: normal; color: var(--c-primary); }
-
-.quiz-stem {
-  font-size: 16px; line-height: 1.9; color: var(--c-text);
-  margin-bottom: 24px; letter-spacing: 0.01em;
-}
-.quiz-stem .blank {
-  display: inline-block; min-width: 60px;
-  border-bottom: 2.5px solid var(--c-accent);
-  margin: 0 4px; padding: 1px 8px;
-  color: var(--c-accent); font-weight: 500;
-  outline: none; cursor: text; vertical-align: baseline;
-  transition: border-color 0.2s, color 0.2s;
-  font-size: 15px; line-height: 1.5;
-}
-.quiz-stem .blank:focus {
-  border-bottom-color: var(--c-primary);
-  color: var(--c-primary);
-}
-
-.answer-section { margin-bottom: 6px; }
-.answer-section label {
-  display: block; font-size: 12px; font-weight: 600; color: var(--c-text-muted);
-  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;
-}
-.answer-section textarea {
-  width: 100%; padding: 12px 16px; border: 1.5px solid var(--c-border);
-  border-radius: var(--radius-sm); font-size: 14px; min-height: 56px;
-  font-family: var(--font-sans); color: var(--c-text);
-  background: #fafbfc; resize: none; outline: none;
-  line-height: 1.6; transition: border-color 0.2s, box-shadow 0.2s;
-}
-.answer-section textarea:focus {
-  border-color: var(--c-primary);
-  box-shadow: 0 0 0 3px var(--c-primary-light);
+.option:hover { border-color: var(--line-strong); background: #fbfcfe; }
+.option.selected { border-color: var(--blue); background: var(--blue-soft); }
+.option.correct { border-color: #8dd3a2; background: var(--green-soft); }
+.option.wrong { border-color: #edaaaa; background: var(--red-soft); }
+.option-key { width: 30px; height: 30px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: #eef2f7; color: var(--muted); font-weight: 900; }
+.option.selected .option-key { background: var(--blue); color: #fff; }
+.option.correct .option-key { background: var(--green); color: #fff; }
+.option.wrong .option-key { background: var(--red); color: #fff; }
+.quiz-foot { padding: 0 28px 24px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.btn {
+  min-height: 40px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 800;
+  color: var(--text);
   background: #fff;
 }
-.answer-section textarea::placeholder { color: #c4c9d0; }
-
-.ref-box {
-  margin-top: 16px; padding: 16px 20px;
-  background: var(--c-green-light);
-  border: 1px solid var(--c-green-border);
-  border-radius: var(--radius-md);
-  display: none;
-}
-.ref-box.show { display: block; }
-.ref-box .ref-label {
-  font-size: 11px; font-weight: 700; color: var(--c-green);
-  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
-}
-.ref-box .ref-text { font-size: 15px; color: var(--c-text); line-height: 1.7; }
-
-.quiz-foot {
-  padding: 0 32px 20px; display: flex; align-items: center; gap: 10px;
-  flex-wrap: wrap;
-}
-.btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 10px 20px; border-radius: var(--radius-sm);
-  font-size: 14px; font-family: var(--font-sans); font-weight: 500;
-  cursor: pointer; border: none; outline: none;
-  transition: all 0.2s; letter-spacing: 0.01em;
-  white-space: nowrap;
-}
-.btn:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
-
-.btn-primary {
-  background: var(--c-primary); color: #fff;
-  box-shadow: 0 1px 2px rgba(50,102,204,0.3);
-}
-.btn-primary:hover { background: var(--c-primary-hover); box-shadow: 0 2px 6px rgba(50,102,204,0.35); transform: translateY(-1px); }
-.btn-primary:active { transform: translateY(0); }
-
-.btn-secondary {
-  background: #fff; color: var(--c-primary);
-  border: 1.5px solid var(--c-primary);
-}
-.btn-secondary:hover { background: var(--c-primary-light); }
-.btn-secondary:active { background: #dce4f8; }
-
-.btn-ghost {
-  background: transparent; color: var(--c-text-muted);
-}
-.btn-ghost:hover { color: var(--c-text); background: #f3f4f6; }
-
-.btn-home {
-  background: var(--c-green-light); color: var(--c-green);
-  border: 1.5px solid var(--c-green-border);
-  text-decoration: none;
-}
-.btn-home:hover { background: #dcfce7; }
-
-.kbd-row {
-  font-size: 11px; color: var(--c-text-muted);
-  flex: 1 0 100%;
-  margin-right: auto; display: flex; gap: 8px; align-items: center;
-}
-.kbd-row kbd {
-  display: inline-block; padding: 2px 7px;
-  background: #f3f4f6; border: 1px solid #e5e7eb;
-  border-radius: 4px; font-size: 11px; font-family: var(--font-sans);
-  box-shadow: 0 1px 0 #e5e7eb;
-}
-
-/* ===== 响应式 ===== */
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.btn-primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+.btn-primary:not(:disabled):hover { background: #2047ad; }
+.btn-secondary { color: var(--blue); border-color: #b9c9f7; background: #fff; }
+.btn-secondary:not(:disabled):hover { background: var(--blue-soft); }
+.btn-plain { color: var(--muted); border-color: var(--line); background: #fff; }
+.btn-plain:not(:disabled):hover { color: var(--text); background: #f6f8fb; }
+.kbd-hint { margin-right: auto; color: var(--faint); font-size: 12px; }
+kbd { font-family: var(--font); border: 1px solid var(--line); background: #f8fafc; border-radius: 5px; padding: 1px 6px; color: var(--muted); }
+.start-overlay { position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(244, 246, 248, .92); backdrop-filter: blur(10px); }
+.start-panel { width: min(760px, 100%); background: #fff; border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); padding: 24px; }
+.start-panel h2 { margin: 0; font-size: 24px; }
+.start-panel p { margin: 8px 0 20px; color: var(--muted); line-height: 1.7; }
+.start-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.start-card { border: 1px solid var(--line); border-radius: 8px; background: #fff; min-height: 142px; padding: 18px; text-align: left; display: grid; align-content: space-between; }
+.start-card:hover { border-color: var(--blue); box-shadow: 0 12px 26px rgba(40,84,197,.12); }
+.start-card h3 { margin: 0; font-size: 20px; }
+.start-card span { color: var(--muted); font-size: 13px; line-height: 1.65; }
+.start-card b { color: var(--blue); }
 @media (max-width: 900px) {
-  body { flex-direction: column; }
-  .sidebar { width: 100%; min-width: 100%; max-width: 100%; max-height: 40vh; }
-  .main-area { padding: 20px 12px; }
-  .quiz-foot { flex-wrap: wrap; }
+  body { grid-template-columns: 1fr; grid-template-rows: minmax(330px, 42vh) 1fr; overflow: auto; }
+  .sidebar { height: auto; min-height: 330px; }
+  .main { height: auto; min-height: 58vh; padding: 16px; }
+  .quiz-head { align-items: flex-start; flex-direction: column; }
+  .stats { justify-content: flex-start; }
+}
+@media (max-width: 620px) {
+  body { grid-template-rows: minmax(360px, 48vh) 1fr; }
+  .sidebar-head, .mode-tabs, .search-wrap, .sidebar-foot { padding-left: 14px; padding-right: 14px; }
+  .q-row { padding-left: 22px; padding-right: 14px; }
+  .chapter-title { padding-left: 14px; padding-right: 14px; }
+  .quiz-body { padding: 22px 18px 18px; }
+  .quiz-foot { padding: 0 18px 20px; }
+  .qnum { font-size: 24px; }
+  .start-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
-
 <aside class="sidebar">
-  <div class="sidebar-top">
-    <h1>计算机<span>组成</span>原理</h1>
-    <div class="sub" id="subInfo">填空题库 · 期末复习</div>
+  <div class="sidebar-head">
+    <div class="title-row">
+      <h1>计算机组成原理题库</h1>
+      <a class="home-link" href="./index.html">返回主页</a>
+    </div>
+    <div class="subline" id="subline"></div>
   </div>
-  <div class="search-bar">
-    <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input type="text" id="searchInput" placeholder="搜索题目…">
+  <div class="mode-tabs" aria-label="题型切换">
+    <button class="mode-tab" id="tabFill" type="button" data-mode="fill"><b>填空题</b><small id="fillCount"></small></button>
+    <button class="mode-tab" id="tabChoice" type="button" data-mode="choice"><b>选择题</b><small id="choiceCount"></small></button>
+  </div>
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+    <input id="searchInput" type="search" placeholder="搜索题干或答案">
   </div>
   <nav class="nav-list" id="navList"></nav>
-  <div class="sidebar-bottom">
-    <span>共 <strong>30</strong> 题</span>
-    <span class="done-info" id="doneCount">已看 <strong>0</strong> 题</span>
-  </div>
+  <div class="sidebar-foot" id="sidebarFoot"></div>
 </aside>
-
-<main class="main-area">
-  <div class="quiz-card">
+<main class="main">
+  <section class="quiz-card" aria-live="polite">
     <div class="quiz-head">
-      <div class="chapter-tag" id="chapterTag">第一章</div>
-      <div class="stats">
-        <div class="stat-item">已答 <b id="answeredVal">0</b> 题</div>
-        <div class="stat-item">已看答案 <b id="revealedVal">0</b> 次</div>
+      <div class="tagline">
+        <div class="bank-tag" id="bankTag"></div>
+        <div class="chapter-tag" id="chapterTag"></div>
       </div>
+      <div class="stats" id="stats"></div>
     </div>
-    <div class="quiz-content">
-      <div class="quiz-num">第 <em id="qNum">1</em> 题</div>
-      <div class="quiz-stem" id="qStem"></div>
-      <div class="answer-section">
-        <label>你的答案</label>
-        <textarea id="userAnswer" placeholder="多个空请用中文逗号分隔，如：运算器、存储器"></textarea>
-      </div>
-      <div class="ref-box" id="refBox">
-        <div class="ref-label">参考答案</div>
-        <div class="ref-text" id="refText"></div>
-      </div>
-    </div>
-    <div class="quiz-foot">
-      <div class="kbd-row"><kbd>→</kbd> 下一题 <kbd>Space</kbd> 看答案</div>
-      <a class="btn btn-home" href="./index.html">返回主页</a>
-      <button class="btn btn-ghost" id="btnReset">重置进度</button>
-      <button class="btn btn-secondary" id="btnReveal">查看答案</button>
-      <button class="btn btn-secondary" id="btnNext">下一题</button>
-      <button class="btn btn-primary" id="btnRandom">随机抽题</button>
+    <div class="quiz-body" id="quizBody"></div>
+    <div class="quiz-foot" id="quizFoot"></div>
+  </section>
+</main>
+<div class="start-overlay" id="startOverlay">
+  <div class="start-panel">
+    <h2>选择题型</h2>
+    <p>填空题保留查看答案进度，选择题保留作答、正确和错误记录。</p>
+    <div class="start-grid">
+      <button class="start-card" type="button" data-start="fill">
+        <h3>填空题</h3>
+        <span><b>43</b> 道，点击查看答案，不判断对错。</span>
+      </button>
+      <button class="start-card" type="button" data-start="choice">
+        <h3>选择题</h3>
+        <span><b>156</b> 道，提交后立即判断正确与错误。</span>
+      </button>
     </div>
   </div>
-</main>
-
+</div>
 <script>
-const POOL = [
-  { id:1,  ch:"第一章 计算机系统概论",         q:"计算机各组成部件相互连接方式，从早期的以（_____）中心，发展到现在的以（_____）为中心。", a:"运算器、存储器" },
-  { id:2,  ch:"第一章 计算机系统概论",         q:"冯·诺依曼机器结构由①_____、②_____、③_____、④_____和⑤_____五大部分组成。", a:"运算器、控制器、存储器、输入设备、输出设备" },
-  { id:3,  ch:"第一章 计算机系统概论",         q:"可由硬件直接识别和执行的语言是（_____）。", a:"机器语言" },
-  { id:4,  ch:"第三章 系统总线",               q:"总线通信常用的有_____、_____、_____、_____四种方式。", a:"同步通信、异步通信、半同步通信、分离式通信" },
-  { id:5,  ch:"第三章 系统总线",               q:"在集中式总线仲裁中，_____响应时间最快。_____对电路故障最敏感。", a:"独立请求方式、链式查询方式" },
-  { id:6,  ch:"第三章 系统总线",               q:"总线控制方式分为_____与_____两类。", a:"集中式、分布式" },
-  { id:7,  ch:"第三章 系统总线",               q:"集中式总线控制主要有_____、_____和_____方式。", a:"链式查询、计数器定时查询、独立请求方式" },
-  { id:8,  ch:"第三章 系统总线",               q:"在总线的异步通信方式中，通信的双方可以通过（_____）、（_____）和（_____）三种类型联络。", a:"不互锁、半互锁、全互锁" },
-  { id:9,  ch:"第四章 存储器",                 q:"存储器在计算机中的主要功能是存储_____和_____。", a:"程序、数据" },
-  { id:10, ch:"第四章 存储器",                 q:"动态RAM靠_____的原理存储信息，因此一般在_____时间内必须刷新一次，刷新与_____地址有关，该地址由_____给出。", a:"电容存储电荷、2ms、行、刷新地址计数器" },
-  { id:11, ch:"第四章 存储器",                 q:"动态RAM常用的三种刷新方式包括（_____）、（_____）、（_____）。", a:"集中刷新、分散刷新、异步刷新" },
-  { id:12, ch:"第四章 存储器",                 q:"引入cache的目的是弥补CPU与主存间存在的_____。", a:"速度差" },
-  { id:13, ch:"第四章 存储器",                 q:"常用的替换算法有_____、_____和_____三种。", a:"先进先出（FIFO）、近期最少使用（LRU）、随机替换" },
-  { id:14, ch:"第五章 输入输出系统",            q:"常用的I/O控制方式有（_____）、（_____）、（_____）、（_____）和（_____）五种。", a:"程序查询方式、程序中断方式、DMA方式、通道方式、I/O处理机方式" },
-  { id:15, ch:"第五章 输入输出系统",            q:"CPU对I/O的编址方式有（_____）与（_____）两种。", a:"统一编址、独立编址" },
-  { id:16, ch:"第五章 输入输出系统",            q:"中断隐指令的主要功能是（_____）、（_____）和（_____）。", a:"保护程序断点、寻找服务程序入口地址、硬件关中断" },
-  { id:17, ch:"第五章 输入输出系统",            q:"在DMA方式中，CPU和DMA控制器通常采用三种方法来分时使用主存，它们是（_____）、（_____）和（_____）。", a:"停止CPU访问主存、周期挪用（周期窃取）、DMA与CPU交替访存" },
-  { id:18, ch:"第六章 计算机的运算方法",        q:"完成浮点加、减法运算一般要经过（_____）、（_____）、（_____）、（_____）和（_____）五步。", a:"对阶、尾数求和、规格化、舍入、判溢出" },
-  { id:19, ch:"第六章 计算机的运算方法",        q:"引入先行进位概念的目的是提高_____。", a:"运算速度" },
-  { id:20, ch:"第七章 指令系统",               q:"设指令字长等于存储字长，均为24位，若某指令系统可完成108种操作，操作码长度固定，且具有直接、间接（一次间址）、变址、基址、相对、立即寻址方式，则在保证最大范围内直接寻址的前提下，指令字中操作码占_____位，寻址特征位占_____位，可直接寻址的范围是_____，一次间址的范围是_____。", a:"7、3、2^14、2^24" },
-  { id:21, ch:"第七章 指令系统",               q:"指令寻址的基本方式有两种，一种是_____寻址方式，其指令地址由_____给出，另一种是_____寻址方式，其指令地址由_____给出。", a:"顺序、程序计数器、跳跃、指令本身" },
-  { id:22, ch:"第七章 指令系统",               q:"变址寻址和基址寻址的区别是：在基址寻址中，基址寄存器提供_____，指令中形式地址提供_____；而在变址寻址中，变址寄存器提供_____，指令中形式地址提供_____。", a:"基地址、偏移量、偏移量、基地址" },
-  { id:23, ch:"第八章 CPU的结构和功能",         q:"指令周期是指（_____）。", a:"CPU取出并执行一条指令所需的全部时间" },
-  { id:24, ch:"第八章 CPU的结构和功能",         q:"完成一条指令一般分为_____周期和_____周期。", a:"取指、执行" },
-  { id:25, ch:"第十章 控制单元的设计",          q:"在组合逻辑控制器中，微操作控制信号由_____、_____和_____决定。", a:"指令操作码、时序、状态条件" },
-  { id:26, ch:"第十章 控制单元的设计",          q:"微指令格式可分为_____型和_____型两类，其中_____型微指令用较长的微程序结构换取较短的微指令结构。其中_____型微指令用较短的微程序结构换取较短的微指令结构。", a:"水平型微指令、垂直型微指令、垂直、水平" },
-  { id:27, ch:"第十章 控制单元的设计",          q:"当指令取至指令寄存器后，每一条机器指令的微程序入口地址是根据_____通过_____形成的。", a:"操作码、微地址形成部件" },
-  { id:28, ch:"第十章 控制单元的设计",          q:"在微程序控制器中，一条机器指令对应一个微程序，若某机有38条机器指令，通常可对应_____个微程序。", a:"41" },
-  { id:29, ch:"第十章 控制单元的设计",          q:"假设微指令的操作控制字段共18位，若采用直接控制，则一条微指令最多可同时启动_____个微操作命令。若采用字段直接编码控制，并要求一条微指令能同时启动3个微操作，则微指令的操作控制字段应分_____段，若每个字段的微操作数相同，这样的微指令格式最多可包含_____个微操作命令。", a:"18、3、189" },
-  { id:30, ch:"第十章 控制单元的设计",          q:"某机微指令格式中共有6个控制字段，每个字段分别激活4、7、3、11、9、16种控制信号，采用直接编码方式，微指令的操作控制字段应取_____位，采用字段直接编码方式，微指令的操作控制字段应取_____位。", a:"50、21" }
-];
+const BANKS = {
+  "fill": [
+    {
+      "chapter": "第一章 计算机系统概论",
+      "stem": "可由硬件直接识别和执行的语言是_____。",
+      "answer": "机器语言",
+      "id": "F001",
+      "number": 1
+    },
+    {
+      "chapter": "第一章 计算机系统概论",
+      "stem": "计算机各组成部件相互连接方式，从早期的以_____中心，发展到现在的以_____为中心。",
+      "answer": "运算器、存储器",
+      "id": "F002",
+      "number": 2
+    },
+    {
+      "chapter": "第一章 计算机系统概论",
+      "stem": "冯·诺依曼机器结构由_____、_____、_____、_____和_____五大部分组成。",
+      "answer": "运算器、控制器、存储器、输入设备、输出设备",
+      "id": "F003",
+      "number": 3
+    },
+    {
+      "chapter": "第三章 系统总线",
+      "stem": "总线通信常用的有_____、_____、_____、_____四种方式。",
+      "answer": "同步通信、异步通信、半同步通信、分离式通信",
+      "id": "F004",
+      "number": 4
+    },
+    {
+      "chapter": "第三章 系统总线",
+      "stem": "总线控制方式分为_____与_____两类。",
+      "answer": "集中式、分布式",
+      "id": "F005",
+      "number": 5
+    },
+    {
+      "chapter": "第三章 系统总线",
+      "stem": "集中式总线控制主要有_____方式、_____方式、_____方式三种控制方式。",
+      "answer": "链式查询、计数器定时查询、独立请求",
+      "id": "F006",
+      "number": 6
+    },
+    {
+      "chapter": "第三章 系统总线",
+      "stem": "在总线的异步通信方式中，通信的双方可以通过_____、_____和_____三种类型联络。",
+      "answer": "不互锁、半互锁、全互锁",
+      "id": "F007",
+      "number": 7
+    },
+    {
+      "chapter": "第三章 系统总线",
+      "stem": "在集中式总线仲裁中，_____方式对电路故障最敏感。_____方式速度最快。",
+      "answer": "链式查询、独立请求",
+      "id": "F008",
+      "number": 8
+    },
+    {
+      "chapter": "第三章 系统总线",
+      "stem": "对于同步通信而言，影响其效率的主要因素是以_____的部件设计公共时钟，它一般用于各部件存取时间_____场合。",
+      "answer": "最慢速度、比较一致",
+      "id": "F009",
+      "number": 9
+    },
+    {
+      "chapter": "第四章 存储器",
+      "stem": "存储器在计算机中的主要功能是存储_____和_____。",
+      "answer": "程序、数据",
+      "id": "F010",
+      "number": 10
+    },
+    {
+      "chapter": "第四章 存储器",
+      "stem": "引入 Cache 的目的是弥补 CPU 与主存间存在的_____。",
+      "answer": "速度差",
+      "id": "F011",
+      "number": 11
+    },
+    {
+      "chapter": "第四章 存储器",
+      "stem": "常用的替换算法有_____、_____和_____三种。",
+      "answer": "先进先出（FIFO）、近期最少使用（LRU）、随机替换",
+      "id": "F012",
+      "number": 12
+    },
+    {
+      "chapter": "第四章 存储器",
+      "stem": "某计算机的存储系统由 Cache 和主存组成，某程序执行过程中访存 500 次，其中访问 Cache 缺失（未命中）40 次，则 Cache 的命中率是_____。",
+      "answer": "92%（或0.92）",
+      "id": "F013",
+      "number": 13
+    },
+    {
+      "chapter": "第四章 存储器",
+      "stem": "_____和_____组成存储系统的层次结构。",
+      "answer": "Cache-主存、主存-辅存",
+      "id": "F014",
+      "number": 14
+    },
+    {
+      "chapter": "第四章 存储器",
+      "stem": "动态 RAM 靠_____的原理存储信息，因此一般在_____时间内必须刷新一次，刷新与_____地址有关，该地址由刷新地址计数器给出。",
+      "answer": "电容存储电荷、2ms、行",
+      "id": "F015",
+      "number": 15
+    },
+    {
+      "chapter": "第四章 存储器",
+      "stem": "动态 RAM 常用的三种刷新方式包括_____、_____和_____。",
+      "answer": "集中刷新、分散刷新、异步刷新",
+      "id": "F016",
+      "number": 16
+    },
+    {
+      "chapter": "第五章 输入输出系统",
+      "stem": "DMA的数据块传送可分为_____、_____和_____阶段。",
+      "answer": "预处理、数据传送、后处理",
+      "id": "F017",
+      "number": 17
+    },
+    {
+      "chapter": "第五章 输入输出系统",
+      "stem": "I/O设备与主机交换信息时，有五种控制方式：_____方式、_____方式、_____方式、_____方式和_____方式。",
+      "answer": "程序查询、程序中断、DMA、通道、I/O处理机",
+      "id": "F018",
+      "number": 18
+    },
+    {
+      "chapter": "第五章 输入输出系统",
+      "stem": "在DMA方式中，CPU和DMA控制器通常采用三种方法来分时使用主存，它们是_____、_____和_____。",
+      "answer": "停止CPU访问主存、周期挪用（周期窃取）、DMA与CPU交替访存",
+      "id": "F019",
+      "number": 19
+    },
+    {
+      "chapter": "第五章 输入输出系统",
+      "stem": "按序写出多重中断的中断服务程序包括_____、_____、_____、_____和中断返回。",
+      "answer": "保护现场、开中断、设备服务、恢复现场",
+      "id": "F020",
+      "number": 20
+    },
+    {
+      "chapter": "第五章 输入输出系统",
+      "stem": "CPU 对 I/O 的编址方式有_____编址与_____编址两种。前者需有独立的 I/O 指令，后者可通过_____指令和设备交换信息。",
+      "answer": "独立、统一、访存",
+      "id": "F021",
+      "number": 21
+    },
+    {
+      "chapter": "第五章 输入输出系统",
+      "stem": "中断隐指令的主要功能是_____、_____和_____。",
+      "answer": "保护程序断点、寻找中断服务程序入口地址、关中断",
+      "id": "F022",
+      "number": 22
+    },
+    {
+      "chapter": "第六章 计算机的运算方法",
+      "stem": "引入先行进位概念的目的是提高_____。",
+      "answer": "运算速度",
+      "id": "F023",
+      "number": 23
+    },
+    {
+      "chapter": "第六章 计算机的运算方法",
+      "stem": "完成浮点加减法运算一般要经过_____、_____、_____、_____和_____五步。",
+      "answer": "对阶、尾数求和、规格化、舍入、判溢出",
+      "id": "F024",
+      "number": 24
+    },
+    {
+      "chapter": "第六章 计算机的运算方法",
+      "stem": "一个浮点数，当其尾数右移1位时，欲使其值不变，阶码应_____。",
+      "answer": "加1",
+      "id": "F025",
+      "number": 25
+    },
+    {
+      "chapter": "第六章 计算机的运算方法",
+      "stem": "设 n = 8（不包括符号位），则原码一位乘需做_____次移位和最多_____次加法，补码 Booth 算法需做_____次移位和最多_____次加法。",
+      "answer": "8、8、8、9",
+      "id": "F026",
+      "number": 26
+    },
+    {
+      "chapter": "第六章 计算机的运算方法",
+      "stem": "设机器数字长为8位（含1位符号位），补码定点整数00011101左移两位后的值为_____B，补码定点整数11010110右移一位后的值为_____B。",
+      "answer": "01110100、11101011",
+      "id": "F027",
+      "number": 27
+    },
+    {
+      "chapter": "第七章 指令系统",
+      "stem": "设指令字长等于存储字长，均为24位，若某指令系统可完成108种操作，操作码长度固定，且具有直接、间接（一次间址）、变址、基址、相对、立即寻址方式，则在保证最大范围内直接寻址的前提下，指令字中操作码占_____位，寻址特征位占_____位，可直接寻址的范围是_____，一次间址的范围是_____。",
+      "answer": "7、3、2^14、2^24",
+      "id": "F028",
+      "number": 28
+    },
+    {
+      "chapter": "第七章 指令系统",
+      "stem": "指令寻址的基本方式有两种，一种是_____寻址方式，其指令地址由_____给出，另一种是_____寻址方式，其指令地址由_____给出。",
+      "answer": "顺序、程序计数器、跳跃、指令本身",
+      "id": "F029",
+      "number": 29
+    },
+    {
+      "chapter": "第七章 指令系统",
+      "stem": "变址寻址和基址寻址的区别是：在基址寻址中，基址寄存器提供_____，指令中形式地址提供_____；而在变址寻址中，变址寄存器提供_____，指令中形式地址提供_____。",
+      "answer": "基地址、偏移量、偏移量、基地址",
+      "id": "F030",
+      "number": 30
+    },
+    {
+      "chapter": "第七章 指令系统",
+      "stem": "每条指令由两部分组成，即_____，_____。",
+      "answer": "操作码、地址码",
+      "id": "F031",
+      "number": 31
+    },
+    {
+      "chapter": "第七章 指令系统",
+      "stem": "对于一条隐含寻址的算术运算指令，其指令字中不明确给出_____，其中一个操作数通常隐含在_____中。",
+      "answer": "操作数的地址、累加器（ACC）",
+      "id": "F032",
+      "number": 32
+    },
+    {
+      "chapter": "第八章 CPU的结构和功能",
+      "stem": "完成一条指令一般分为_____周期和_____周期。",
+      "answer": "取指、执行",
+      "id": "F033",
+      "number": 33
+    },
+    {
+      "chapter": "第八章 CPU的结构和功能",
+      "stem": "设指令流水线由 5 个子部件完成，并且每个子部件的运行时间均为 t，与采用等功能的非流水线处理机相比，对于连续执行 10 条指令，加速比为_____（保留 2 位小数）。",
+      "answer": "3.57",
+      "id": "F034",
+      "number": 34
+    },
+    {
+      "chapter": "第八章 CPU的结构和功能",
+      "stem": "指令周期是指_____。",
+      "answer": "CPU取出并执行一条指令所需的全部时间",
+      "id": "F035",
+      "number": 35
+    },
+    {
+      "chapter": "第八章 CPU的结构和功能",
+      "stem": "CPU从主存取出一条指令并执行该指令的时间叫_____，它通常包含若干个_____，而后者又包含若干个_____，从而组成多级时序系统。",
+      "answer": "指令周期、机器周期、时钟周期",
+      "id": "F036",
+      "number": 36
+    },
+    {
+      "chapter": "第十章 控制单元的设计",
+      "stem": "在微程序控制器中，一条机器指令对应一个微程序，若某机有38条机器指令，通常可对应_____个微程序。",
+      "answer": "41",
+      "id": "F037",
+      "number": 37
+    },
+    {
+      "chapter": "第十章 控制单元的设计",
+      "stem": "假设微指令的操作控制字段共18位，若采用直接控制，则一条微指令最多可同时启动_____个微操作命令。若采用字段直接编码控制，并要求一条微指令能同时启动3个微操作，则微指令的操作控制字段应分_____段，若每个字段的微操作数相同，这样的微指令格式最多可包含_____个微操作命令。",
+      "answer": "18、3、189",
+      "id": "F038",
+      "number": 38
+    },
+    {
+      "chapter": "第十章 控制单元的设计",
+      "stem": "某机微指令格式中共有6个控制字段，每个字段分别激活4、7、3、11、9、16种控制信号，采用直接编码方式，微指令的操作控制字段应取_____位，采用字段直接编码方式，微指令的操作控制字段应取_____位。",
+      "answer": "50、21",
+      "id": "F039",
+      "number": 39
+    },
+    {
+      "chapter": "第十章 控制单元的设计",
+      "stem": "微指令格式可分为_____型和_____型两类，其中_____型微指令用较长的微程序结构换取较短的微指令结构。",
+      "answer": "水平、垂直、垂直",
+      "id": "F040",
+      "number": 40
+    },
+    {
+      "chapter": "第十章 控制单元的设计",
+      "stem": "微指令格式可分为_____型和_____型两类，其中_____型微指令用较短的微程序结构换取较长的微指令结构。",
+      "answer": "水平、垂直、水平",
+      "id": "F041",
+      "number": 41
+    },
+    {
+      "chapter": "第十章 控制单元的设计",
+      "stem": "在组合逻辑控制器中，微操作控制信号由_____、_____和_____决定。",
+      "answer": "指令操作码、时序、状态条件",
+      "id": "F042",
+      "number": 42
+    },
+    {
+      "chapter": "第十章 控制单元的设计",
+      "stem": "当指令取至指令寄存器后，每一条机器指令的微程序入口地址是根据_____通过_____形成的。",
+      "answer": "操作码、微地址形成部件",
+      "id": "F043",
+      "number": 43
+    }
+  ],
+  "choice": [
+    {
+      "id": "C001",
+      "number": 1,
+      "chapter": "选择题 001-020",
+      "stem": "具有中断向量表的计算机中，中断向量地址是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "中断服务程序入口地址的地址"
+        },
+        {
+          "key": "B",
+          "text": "子程序入口地址"
+        },
+        {
+          "key": "C",
+          "text": "中断服务程序的入口地址"
+        },
+        {
+          "key": "D",
+          "text": "中断程序断点"
+        }
+      ],
+      "answer": "A",
+      "answerText": "中断服务程序入口地址的地址",
+      "explanation": ""
+    },
+    {
+      "id": "C002",
+      "number": 2,
+      "chapter": "选择题 001-020",
+      "stem": "将微指令的操作控制字段分成若干段,将一组互斥的微操作命令放在一个字段内,通过对这个字段的译码便可对应每一个微指令,这种编码方式为（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "混合编码方式"
+        },
+        {
+          "key": "B",
+          "text": "直接编码方式"
+        },
+        {
+          "key": "C",
+          "text": "字段间接编码方式"
+        },
+        {
+          "key": "D",
+          "text": "字段直接编码方式"
+        }
+      ],
+      "answer": "D",
+      "answerText": "字段直接编码方式",
+      "explanation": ""
+    },
+    {
+      "id": "C003",
+      "number": 3,
+      "chapter": "选择题 001-020",
+      "stem": "微型机系统中，主机和高速硬盘进行数据交换一般采用（ ）方式",
+      "options": [
+        {
+          "key": "A",
+          "text": "程序中断"
+        },
+        {
+          "key": "B",
+          "text": "程序查询"
+        },
+        {
+          "key": "C",
+          "text": "DMA"
+        },
+        {
+          "key": "D",
+          "text": "无正确答案"
+        }
+      ],
+      "answer": "C",
+      "answerText": "DMA",
+      "explanation": ""
+    },
+    {
+      "id": "C004",
+      "number": 4,
+      "chapter": "选择题 001-020",
+      "stem": "补码与移码之间的转换规则是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "数值位求反加1，符号位不变"
+        },
+        {
+          "key": "B",
+          "text": "连同符号位在内求反加1"
+        },
+        {
+          "key": "C",
+          "text": "数值位求反，符号位不变"
+        },
+        {
+          "key": "D",
+          "text": "数值位不变,符号位求反"
+        }
+      ],
+      "answer": "D",
+      "answerText": "数值位不变,符号位求反",
+      "explanation": ""
+    },
+    {
+      "id": "C005",
+      "number": 5,
+      "chapter": "选择题 001-020",
+      "stem": "有一主存-Cache层次的存储器，其主存容量为1MB，Cache容量为16KB，每块有8个字，每字32位，采用直接地址映像方式，若主存地址为35301H，且CPU访问Cache命中，则在Cache的第（ ）（十进制表示）字块中（Cache起始字块为第0字块）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "152"
+        },
+        {
+          "key": "B",
+          "text": "153"
+        },
+        {
+          "key": "C",
+          "text": "154"
+        },
+        {
+          "key": "D",
+          "text": "151"
+        }
+      ],
+      "answer": "A",
+      "answerText": "152",
+      "explanation": ""
+    },
+    {
+      "id": "C006",
+      "number": 6,
+      "chapter": "选择题 001-020",
+      "stem": "若CPU的主时钟频率为20MHz，CPI的值为4，则MIPS的值是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "5"
+        },
+        {
+          "key": "B",
+          "text": "5000000"
+        },
+        {
+          "key": "C",
+          "text": "200000"
+        },
+        {
+          "key": "D",
+          "text": "0.2"
+        }
+      ],
+      "answer": "A",
+      "answerText": "5",
+      "explanation": ""
+    },
+    {
+      "id": "C007",
+      "number": 7,
+      "chapter": "选择题 001-020",
+      "stem": "在采用中断I/O方式控制打印输出的情况下，CPU和打印控制接口中的I/O端口之间交换的信息不可能是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "控制命令"
+        },
+        {
+          "key": "B",
+          "text": "打印字符"
+        },
+        {
+          "key": "C",
+          "text": "设备状态"
+        },
+        {
+          "key": "D",
+          "text": "主存地址"
+        }
+      ],
+      "answer": "D",
+      "answerText": "主存地址",
+      "explanation": ""
+    },
+    {
+      "id": "C008",
+      "number": 8,
+      "chapter": "选择题 001-020",
+      "stem": "存储器是计算机系统的记忆设备，它主要用来（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "存放数据和指令"
+        },
+        {
+          "key": "B",
+          "text": "以上都不正确"
+        },
+        {
+          "key": "C",
+          "text": "存放程序"
+        },
+        {
+          "key": "D",
+          "text": "存放微程序"
+        }
+      ],
+      "answer": "A",
+      "answerText": "存放数据和指令",
+      "explanation": "(存放微程序):这是由控制器内部的控制存储器来存放，控存不属于存储器的组成"
+    },
+    {
+      "id": "C009",
+      "number": 9,
+      "chapter": "选择题 001-020",
+      "stem": "存储器采用哈佛结构可以解决指令流水线中的（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "结构冲突"
+        },
+        {
+          "key": "B",
+          "text": "读写冲突"
+        },
+        {
+          "key": "C",
+          "text": "数据冲突"
+        },
+        {
+          "key": "D",
+          "text": "控制冲突"
+        }
+      ],
+      "answer": "A",
+      "answerText": "结构冲突",
+      "explanation": ""
+    },
+    {
+      "id": "C010",
+      "number": 10,
+      "chapter": "选择题 001-020",
+      "stem": "在三种集中式总线控制中，独立请求方式响应最快，是以（ ）为代价的",
+      "options": [
+        {
+          "key": "A",
+          "text": "以上都不正确"
+        },
+        {
+          "key": "B",
+          "text": "增加控制线数"
+        },
+        {
+          "key": "C",
+          "text": "增加处理机的开销和控制线数"
+        },
+        {
+          "key": "D",
+          "text": "增加处理机的开销"
+        }
+      ],
+      "answer": "B",
+      "answerText": "增加控制线数",
+      "explanation": "(增加控制线数):设备越多，信号线数目越多"
+    },
+    {
+      "id": "C011",
+      "number": 11,
+      "chapter": "选择题 001-020",
+      "stem": "中断响应是在（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "一条指令执行开始"
+        },
+        {
+          "key": "B",
+          "text": "一条指令执行之末"
+        },
+        {
+          "key": "C",
+          "text": "一条指令执行的任何时刻"
+        },
+        {
+          "key": "D",
+          "text": "一条指令执行中间"
+        }
+      ],
+      "answer": "B",
+      "answerText": "一条指令执行之末",
+      "explanation": "(一条指令执行之末):因为仅在cpu执行完当前指令之后，才会去检查是否有中断发生"
+    },
+    {
+      "id": "C012",
+      "number": 12,
+      "chapter": "选择题 001-020",
+      "stem": "冯·诺依曼计算机的指令和数据均以二进制形式存放在存储器中，CPU区分它们的依据是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "指令和数据的存储单元"
+        },
+        {
+          "key": "B",
+          "text": "指令周期的不同阶段"
+        },
+        {
+          "key": "C",
+          "text": "指令和数据的寻址方式"
+        },
+        {
+          "key": "D",
+          "text": "指令操作码的译码结果"
+        }
+      ],
+      "answer": "B",
+      "answerText": "指令周期的不同阶段",
+      "explanation": ""
+    },
+    {
+      "id": "C013",
+      "number": 13,
+      "chapter": "选择题 001-020",
+      "stem": "计算机内部的定点数大多用补码表示，以下是一些关于补码特点的叙述： I. 零的表示是唯一的 II. 符号位可以和数值部分一起参加运算 III. 正数不存在补码，负数的补码可用反码加1来求得 IV. 减法可用加法来实现 在以上叙述中，（ ）是补码表示的特点。",
+      "options": [
+        {
+          "key": "A",
+          "text": "I和II和IV"
+        },
+        {
+          "key": "B",
+          "text": "I和III"
+        },
+        {
+          "key": "C",
+          "text": "I和II和III"
+        },
+        {
+          "key": "D",
+          "text": "I和II"
+        }
+      ],
+      "answer": "A",
+      "answerText": "I和II和IV",
+      "explanation": ""
+    },
+    {
+      "id": "C014",
+      "number": 14,
+      "chapter": "选择题 001-020",
+      "stem": "下列关于指令周期的叙述中，错误的是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "在一个指令周期结束，下一个指令周期之前查询是否有中断发生"
+        },
+        {
+          "key": "B",
+          "text": "指令周期的第—个机器周期—定是取指周期"
+        },
+        {
+          "key": "C",
+          "text": "在有间接寻址的指令周期中至少访问两次内存"
+        },
+        {
+          "key": "D",
+          "text": "所有指令的指令周期—样长"
+        }
+      ],
+      "answer": "D",
+      "answerText": "所有指令的指令周期—样长",
+      "explanation": ""
+    },
+    {
+      "id": "C015",
+      "number": 15,
+      "chapter": "选择题 001-020",
+      "stem": "设置中断排队判优逻辑的目的是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "以上都不正确"
+        },
+        {
+          "key": "B",
+          "text": "产生中断源编码"
+        },
+        {
+          "key": "C",
+          "text": "使同时提出的请求中的优先级别最高者得到及时响应"
+        },
+        {
+          "key": "D",
+          "text": "提高中断响应速度"
+        }
+      ],
+      "answer": "C",
+      "answerText": "使同时提出的请求中的优先级别最高者得到及时响应",
+      "explanation": ""
+    },
+    {
+      "id": "C016",
+      "number": 16,
+      "chapter": "选择题 001-020",
+      "stem": "假定有4个整数用8位补码分别表示R1=FEH, R2=F2H,R3=90H, R4=F8H，,若将运算结果存放在一个8位的寄存器中，则下列运算会发生溢出的是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "R1*R4"
+        },
+        {
+          "key": "B",
+          "text": "R1*R2"
+        },
+        {
+          "key": "C",
+          "text": "R2*R3"
+        },
+        {
+          "key": "D",
+          "text": "R2*R4"
+        }
+      ],
+      "answer": "C",
+      "answerText": "R2*R3",
+      "explanation": ""
+    },
+    {
+      "id": "C017",
+      "number": 17,
+      "chapter": "选择题 001-020",
+      "stem": "设指令流水线由5个子部件完成，并且每个子部件的运行时间均为t，与采用等功能的非流水线处理机相比，对于连续执行8条指令，加速比为（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "3"
+        },
+        {
+          "key": "B",
+          "text": "2.4"
+        },
+        {
+          "key": "C",
+          "text": "2"
+        },
+        {
+          "key": "D",
+          "text": "3.3"
+        }
+      ],
+      "answer": "D",
+      "answerText": "3.3",
+      "explanation": "(3.3):5*8/(5+7)"
+    },
+    {
+      "id": "C018",
+      "number": 18,
+      "chapter": "选择题 001-020",
+      "stem": "主机与设备传送数据时，采用（ ），主机与设备是串行工作的。",
+      "options": [
+        {
+          "key": "A",
+          "text": "DMA方式"
+        },
+        {
+          "key": "B",
+          "text": "以上都不正确"
+        },
+        {
+          "key": "C",
+          "text": "程序查询方式"
+        },
+        {
+          "key": "D",
+          "text": "中断方式"
+        }
+      ],
+      "answer": "C",
+      "answerText": "程序查询方式",
+      "explanation": ""
+    },
+    {
+      "id": "C019",
+      "number": 19,
+      "chapter": "选择题 001-020",
+      "stem": "在32位总线系统中，若时钟频率为500MHz，传送一个32位字需要5个时钟周期，则 该总线的数据传输率是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "200MB/s"
+        },
+        {
+          "key": "B",
+          "text": "600MB/s"
+        },
+        {
+          "key": "C",
+          "text": "400MB/s"
+        },
+        {
+          "key": "D",
+          "text": "800MB/s"
+        }
+      ],
+      "answer": "C",
+      "answerText": "400MB/s",
+      "explanation": ""
+    },
+    {
+      "id": "C020",
+      "number": 20,
+      "chapter": "选择题 001-020",
+      "stem": "设[X]补=11101000，其算术右移后的结果为",
+      "options": [
+        {
+          "key": "A",
+          "text": "11010001"
+        },
+        {
+          "key": "B",
+          "text": "11110100"
+        },
+        {
+          "key": "C",
+          "text": "01110100"
+        },
+        {
+          "key": "D",
+          "text": "10110100"
+        }
+      ],
+      "answer": "B",
+      "answerText": "11110100",
+      "explanation": ""
+    },
+    {
+      "id": "C021",
+      "number": 21,
+      "chapter": "选择题 021-040",
+      "stem": "执行最快的语言是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "汇编语言"
+        },
+        {
+          "key": "B",
+          "text": "机器语言"
+        },
+        {
+          "key": "C",
+          "text": "PASCAL"
+        },
+        {
+          "key": "D",
+          "text": "COBOL"
+        }
+      ],
+      "answer": "B",
+      "answerText": "机器语言",
+      "explanation": "(机器语言):可执行执行，执行效率同汇编语言 (汇编语言):汇编语言不能直接执行，必须经过汇编之后方可执行"
+    },
+    {
+      "id": "C022",
+      "number": 22,
+      "chapter": "选择题 021-040",
+      "stem": "流水线的描述，错误的是",
+      "options": [
+        {
+          "key": "A",
+          "text": "在流水线中插入气泡（停顿），不会影响流水线中指令的执行速度"
+        },
+        {
+          "key": "B",
+          "text": "设计流水线的目的是提高指令执行的并行性，加快速度"
+        },
+        {
+          "key": "C",
+          "text": "因为各种相关问题的存在，导致流水线性能提升不能达到理想的倍数"
+        },
+        {
+          "key": "D",
+          "text": "一般来说流水线级数越多，加速效果越好"
+        }
+      ],
+      "answer": "A",
+      "answerText": "在流水线中插入气泡（停顿），不会影响流水线中指令的执行速度",
+      "explanation": ""
+    },
+    {
+      "id": "C023",
+      "number": 23,
+      "chapter": "选择题 021-040",
+      "stem": "浮点加减中的对阶是指（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "将加数的阶码调整到与被加数的阶码相同"
+        },
+        {
+          "key": "B",
+          "text": "将较小的一个阶码调整到与较大的一个阶码相同"
+        },
+        {
+          "key": "C",
+          "text": "将被加数的阶码调整到与加数的阶码相同"
+        },
+        {
+          "key": "D",
+          "text": "将较大的一个阶码调整到与较小的一个阶码相同"
+        }
+      ],
+      "answer": "B",
+      "answerText": "将较小的一个阶码调整到与较大的一个阶码相同",
+      "explanation": ""
+    },
+    {
+      "id": "C024",
+      "number": 24,
+      "chapter": "选择题 021-040",
+      "stem": "EEPROM是指（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "电可擦除可编程存储器"
+        },
+        {
+          "key": "B",
+          "text": "可编程只读存储器"
+        },
+        {
+          "key": "C",
+          "text": "读写存储器"
+        },
+        {
+          "key": "D",
+          "text": "只读存储器"
+        }
+      ],
+      "answer": "A",
+      "answerText": "电可擦除可编程存储器",
+      "explanation": ""
+    },
+    {
+      "id": "C025",
+      "number": 25,
+      "chapter": "选择题 021-040",
+      "stem": "DRAM刷新是以（ ）为单位的",
+      "options": [
+        {
+          "key": "A",
+          "text": "存储字"
+        },
+        {
+          "key": "B",
+          "text": "列"
+        },
+        {
+          "key": "C",
+          "text": "存储单元"
+        },
+        {
+          "key": "D",
+          "text": "行"
+        }
+      ],
+      "answer": "D",
+      "answerText": "行",
+      "explanation": ""
+    },
+    {
+      "id": "C026",
+      "number": 26,
+      "chapter": "选择题 021-040",
+      "stem": "计算机内实现浮点数乘法运算时，以下四项操作完成的先后顺序是 （1）尾数相乘（2）阶码相加并判断溢出（3）乘数判零（4）尾数规格化并判断溢出（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "（3）（2）（1）（4）"
+        },
+        {
+          "key": "B",
+          "text": "（3）（1）（2）（4）"
+        },
+        {
+          "key": "C",
+          "text": "（1）（2）（3）（4）"
+        },
+        {
+          "key": "D",
+          "text": "（4）（1）（2）（3）"
+        }
+      ],
+      "answer": "A",
+      "answerText": "（3）（2）（1）（4）",
+      "explanation": ""
+    },
+    {
+      "id": "C027",
+      "number": 27,
+      "chapter": "选择题 021-040",
+      "stem": "在无转发机制的五段基本流水线（取指、译码/读寄存器、运算、访写回寄存器）中，下列指令序列存在数据冲突风险（数据冒险）的指令对是 I1：add R1，R2，R3；（R2）+（R3）→R1 I2：add R5，R2，R4；（R2）+（R4）→R5 I3：add R4，R5，R3；（R5）+（R3）→R4 I4：add R5，R2，R6；（R2）+（R6）→R5（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "I2 和 I3"
+        },
+        {
+          "key": "B",
+          "text": "I2 和 I4"
+        },
+        {
+          "key": "C",
+          "text": "I3 和 I4"
+        },
+        {
+          "key": "D",
+          "text": "I1 和 I2"
+        }
+      ],
+      "answer": "A",
+      "answerText": "I2 和 I3",
+      "explanation": ""
+    },
+    {
+      "id": "C028",
+      "number": 28,
+      "chapter": "选择题 021-040",
+      "stem": "用以指定待执行指令所在地址的是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "累加器"
+        },
+        {
+          "key": "B",
+          "text": "数据计数器"
+        },
+        {
+          "key": "C",
+          "text": "程序计数器"
+        },
+        {
+          "key": "D",
+          "text": "指令寄存器"
+        }
+      ],
+      "answer": "C",
+      "answerText": "程序计数器",
+      "explanation": "(程序计数器):程序计数器总是指向即将执行的指令处，一旦取得该指令后，其会自动加1"
+    },
+    {
+      "id": "C029",
+      "number": 29,
+      "chapter": "选择题 021-040",
+      "stem": "主机与设备传送数据时，采用（ ），CPU的效率最高。",
+      "options": [
+        {
+          "key": "A",
+          "text": "中断方式"
+        },
+        {
+          "key": "B",
+          "text": "DMA方式"
+        },
+        {
+          "key": "C",
+          "text": "以上都不正确"
+        },
+        {
+          "key": "D",
+          "text": "程序查询方式"
+        }
+      ],
+      "answer": "B",
+      "answerText": "DMA方式",
+      "explanation": ""
+    },
+    {
+      "id": "C030",
+      "number": 30,
+      "chapter": "选择题 021-040",
+      "stem": "关于CPU响应中断的条件，下列说法正确的是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "在CPU执行完当前指令后才可能响应中断。"
+        },
+        {
+          "key": "B",
+          "text": "中断响应可以不保存断点和现场"
+        },
+        {
+          "key": "C",
+          "text": "中断响应和DAM请求同时产生时，先响应中断"
+        },
+        {
+          "key": "D",
+          "text": "只要CPU允许中断就可以响应中断"
+        }
+      ],
+      "answer": "A",
+      "answerText": "在CPU执行完当前指令后才可能响应中断。",
+      "explanation": ""
+    },
+    {
+      "id": "C031",
+      "number": 31,
+      "chapter": "选择题 021-040",
+      "stem": "微程序控制器的速度比硬布线控制器的速度慢，主要是因为（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "增加了从指令寄存器读取微指令的时间"
+        },
+        {
+          "key": "B",
+          "text": "增加了从主存读取微指令的时间"
+        },
+        {
+          "key": "C",
+          "text": "增加了从控制存储器读取微指令的时间"
+        },
+        {
+          "key": "D",
+          "text": "增加了从磁盘存储器读取微指令的时间"
+        }
+      ],
+      "answer": "C",
+      "answerText": "增加了从控制存储器读取微指令的时间",
+      "explanation": ""
+    },
+    {
+      "id": "C032",
+      "number": 32,
+      "chapter": "选择题 021-040",
+      "stem": "某计算机的字长是16位，它的存储器容量是64KB，若按字编址，那么它的最大寻址范围是 （ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "64K"
+        },
+        {
+          "key": "B",
+          "text": "16K"
+        },
+        {
+          "key": "C",
+          "text": "8K"
+        },
+        {
+          "key": "D",
+          "text": "32K"
+        }
+      ],
+      "answer": "D",
+      "answerText": "32K",
+      "explanation": ""
+    },
+    {
+      "id": "C033",
+      "number": 33,
+      "chapter": "选择题 021-040",
+      "stem": "若某数的真值为–0.1010，在计算机中被表示为1.0110，则该数所用的编码方式为（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "反码"
+        },
+        {
+          "key": "B",
+          "text": "原码"
+        },
+        {
+          "key": "C",
+          "text": "移码"
+        },
+        {
+          "key": "D",
+          "text": "补码"
+        }
+      ],
+      "answer": "D",
+      "answerText": "补码",
+      "explanation": ""
+    },
+    {
+      "id": "C034",
+      "number": 34,
+      "chapter": "选择题 021-040",
+      "stem": "某计算机的指令流水线由4个功能段组成，分别完成取指、取数、运算和传送结果操作，若完成上述操作的时间依次为9ns、10ns、6ns和8ns。则流水线的操作周期应设为（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "6ns"
+        },
+        {
+          "key": "B",
+          "text": "10ns"
+        },
+        {
+          "key": "C",
+          "text": "8ns"
+        },
+        {
+          "key": "D",
+          "text": "9ns"
+        }
+      ],
+      "answer": "B",
+      "answerText": "10ns",
+      "explanation": ""
+    },
+    {
+      "id": "C035",
+      "number": 35,
+      "chapter": "选择题 021-040",
+      "stem": "若补码采用双符号位，则发生正溢出的特征是：双符号位为（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "10"
+        },
+        {
+          "key": "B",
+          "text": "01"
+        },
+        {
+          "key": "C",
+          "text": "11"
+        },
+        {
+          "key": "D",
+          "text": "00"
+        }
+      ],
+      "answer": "B",
+      "answerText": "01",
+      "explanation": ""
+    },
+    {
+      "id": "C036",
+      "number": 36,
+      "chapter": "选择题 021-040",
+      "stem": "有效容量为128KB的Cache，每块16B，采用8路组相联。字节地址为1234567H的单元调入该Cache，则其Tag应为（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "048DH"
+        },
+        {
+          "key": "B",
+          "text": "1234H"
+        },
+        {
+          "key": "C",
+          "text": "2468H"
+        },
+        {
+          "key": "D",
+          "text": "12345H"
+        }
+      ],
+      "answer": "A",
+      "answerText": "048DH",
+      "explanation": ""
+    },
+    {
+      "id": "C037",
+      "number": 37,
+      "chapter": "选择题 021-040",
+      "stem": "I/O编址方式通常可分为统一编址和独立编址，正确的是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "独立编址是指I/O地址和存储器地址是分开的，所以对I/O访问必须有专门的I/O指令"
+        },
+        {
+          "key": "B",
+          "text": "统一编址是指I/O地址和存储器地址是分开的，所以可用访存指令实现CPU对设备的访问"
+        },
+        {
+          "key": "C",
+          "text": "统一编址就是将I/O地址看作是存储器地址的一部分，可用专门的I/O指令对设备进行访问"
+        },
+        {
+          "key": "D",
+          "text": "以上都不正确"
+        }
+      ],
+      "answer": "A",
+      "answerText": "独立编址是指I/O地址和存储器地址是分开的，所以对I/O访问必须有专门的I/O指令",
+      "explanation": ""
+    },
+    {
+      "id": "C038",
+      "number": 38,
+      "chapter": "选择题 021-040",
+      "stem": "存储器的存取周期是指",
+      "options": [
+        {
+          "key": "A",
+          "text": "存储器进行连续读或写操作所允许的最短时间间隔"
+        },
+        {
+          "key": "B",
+          "text": "存储器进行一次读或写操作所需的平均时间"
+        },
+        {
+          "key": "C",
+          "text": "存储器的写入时间"
+        },
+        {
+          "key": "D",
+          "text": "存储器的读出时间"
+        }
+      ],
+      "answer": "A",
+      "answerText": "存储器进行连续读或写操作所允许的最短时间间隔",
+      "explanation": ""
+    },
+    {
+      "id": "C039",
+      "number": 39,
+      "chapter": "选择题 021-040",
+      "stem": "在链式请求方式下，若有N个设备，则（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "有N条总线请求线"
+        },
+        {
+          "key": "B",
+          "text": "以上都不正确"
+        },
+        {
+          "key": "C",
+          "text": "只有一条总线请求线"
+        },
+        {
+          "key": "D",
+          "text": "无法确定有几条总线请求线"
+        }
+      ],
+      "answer": "C",
+      "answerText": "只有一条总线请求线",
+      "explanation": ""
+    },
+    {
+      "id": "C040",
+      "number": 40,
+      "chapter": "选择题 021-040",
+      "stem": "在下面四种I/O接口与主机之间信息传送的控制方式中，下述哪种方式使得主机与外设之间的并行性最高（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "程序中断方式"
+        },
+        {
+          "key": "B",
+          "text": "程序查询控制方式"
+        },
+        {
+          "key": "C",
+          "text": "通道方式"
+        },
+        {
+          "key": "D",
+          "text": "DMA方式"
+        }
+      ],
+      "answer": "C",
+      "answerText": "通道方式",
+      "explanation": ""
+    },
+    {
+      "id": "C041",
+      "number": 41,
+      "chapter": "选择题 041-060",
+      "stem": "在定点数运算中产生溢出的原因是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "运算的结果的操作数超过了机器的表示范围"
+        },
+        {
+          "key": "B",
+          "text": "参加运算的操作数超过了机器的表示范围"
+        },
+        {
+          "key": "C",
+          "text": "运算过程中最高位产生了进位或借位"
+        },
+        {
+          "key": "D",
+          "text": "寄存器的位数太少，不得不舍弃最低有效位"
+        }
+      ],
+      "answer": "A",
+      "answerText": "运算的结果的操作数超过了机器的表示范围",
+      "explanation": ""
+    },
+    {
+      "id": "C042",
+      "number": 42,
+      "chapter": "选择题 041-060",
+      "stem": "一个16K×32位的存储器，寻址到字，其地址线和数据线的总和是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "36"
+        },
+        {
+          "key": "B",
+          "text": "48"
+        },
+        {
+          "key": "C",
+          "text": "以上都不正确"
+        },
+        {
+          "key": "D",
+          "text": "46"
+        }
+      ],
+      "answer": "D",
+      "answerText": "46",
+      "explanation": "(46):16k×32位，意味着有16k个存储字，所以14条地址线；32位，意味着每个存储字的字长是32位，所以32条数据线"
+    },
+    {
+      "id": "C043",
+      "number": 43,
+      "chapter": "选择题 041-060",
+      "stem": "在一个按字节编址的计算机系统中，若数据在存储器中以小端方案存放。假设int型变量i的地址为08000000H，i的机器数为01234567H，地址08000000H单元中的内容是 （ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "23H"
+        },
+        {
+          "key": "B",
+          "text": "45H"
+        },
+        {
+          "key": "C",
+          "text": "01H"
+        },
+        {
+          "key": "D",
+          "text": "67H"
+        }
+      ],
+      "answer": "D",
+      "answerText": "67H",
+      "explanation": ""
+    },
+    {
+      "id": "C044",
+      "number": 44,
+      "chapter": "选择题 041-060",
+      "stem": "加法器采用先行进位的目的是 （ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "增强加法器结构"
+        },
+        {
+          "key": "B",
+          "text": "优化加法器的结构"
+        },
+        {
+          "key": "C",
+          "text": "加速传递进位信号"
+        },
+        {
+          "key": "D",
+          "text": "节省器材"
+        }
+      ],
+      "answer": "C",
+      "answerText": "加速传递进位信号",
+      "explanation": ""
+    },
+    {
+      "id": "C045",
+      "number": 45,
+      "chapter": "选择题 041-060",
+      "stem": "高速缓存直接映射的主要缺点是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "缓存调用算法较复杂"
+        },
+        {
+          "key": "B",
+          "text": "存取速度较慢"
+        },
+        {
+          "key": "C",
+          "text": "成本较高"
+        },
+        {
+          "key": "D",
+          "text": "如果使用中的至少2个块映射到高速缓存同一行，命中率则下降"
+        }
+      ],
+      "answer": "D",
+      "answerText": "如果使用中的至少2个块映射到高速缓存同一行，命中率则下降",
+      "explanation": ""
+    },
+    {
+      "id": "C046",
+      "number": 46,
+      "chapter": "选择题 041-060",
+      "stem": "总线的异步通信方式（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "既采用时钟信号，又采用握手信号"
+        },
+        {
+          "key": "B",
+          "text": "既不采用时钟信号，又不采用握手信号"
+        },
+        {
+          "key": "C",
+          "text": "不采用时钟信号，只采用握手信号"
+        },
+        {
+          "key": "D",
+          "text": "以上都不正确"
+        }
+      ],
+      "answer": "C",
+      "answerText": "不采用时钟信号，只采用握手信号",
+      "explanation": "(既采用时钟信号，又采用握手信号):半同步"
+    },
+    {
+      "id": "C047",
+      "number": 47,
+      "chapter": "选择题 041-060",
+      "stem": "一个512KB的存储器，按字节编址，其地址线和数据线的总和是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "17"
+        },
+        {
+          "key": "B",
+          "text": "19"
+        },
+        {
+          "key": "C",
+          "text": "27"
+        },
+        {
+          "key": "D",
+          "text": "以上都不正确"
+        }
+      ],
+      "answer": "C",
+      "answerText": "27",
+      "explanation": "(27):必须说清寻址到多长的单元，或者按照什么编址。数据线8条，地址线19条"
+    },
+    {
+      "id": "C048",
+      "number": 48,
+      "chapter": "选择题 041-060",
+      "stem": "下列寻址方式中，最适合按下标顺序访问—维数组元素的是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "直接寻址"
+        },
+        {
+          "key": "B",
+          "text": "变址寻址"
+        },
+        {
+          "key": "C",
+          "text": "寄存器寻址"
+        },
+        {
+          "key": "D",
+          "text": "相对寻址"
+        }
+      ],
+      "answer": "B",
+      "answerText": "变址寻址",
+      "explanation": ""
+    },
+    {
+      "id": "C049",
+      "number": 49,
+      "chapter": "选择题 041-060",
+      "stem": "用海明码对长度为8位的数据进行校验/纠错时，若能纠正1位错，则校验位数至少为（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "5"
+        },
+        {
+          "key": "B",
+          "text": "4"
+        },
+        {
+          "key": "C",
+          "text": "2"
+        },
+        {
+          "key": "D",
+          "text": "3"
+        }
+      ],
+      "answer": "B",
+      "answerText": "4",
+      "explanation": ""
+    },
+    {
+      "id": "C050",
+      "number": 50,
+      "chapter": "选择题 041-060",
+      "stem": "下列补码表示的浮点数尾数，不是规格化的一个是",
+      "options": [
+        {
+          "key": "A",
+          "text": "0.01001"
+        },
+        {
+          "key": "B",
+          "text": "1.00110"
+        },
+        {
+          "key": "C",
+          "text": "1.00101"
+        },
+        {
+          "key": "D",
+          "text": "0.11010"
+        }
+      ],
+      "answer": "A",
+      "answerText": "0.01001",
+      "explanation": ""
+    },
+    {
+      "id": "C051",
+      "number": 51,
+      "chapter": "选择题 041-060",
+      "stem": "直接寻址的无条件转移指令功能是将指令中的地址码送入（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "累加器；"
+        },
+        {
+          "key": "B",
+          "text": "PC；"
+        },
+        {
+          "key": "C",
+          "text": "ACC。"
+        },
+        {
+          "key": "D",
+          "text": "地址寄存器；"
+        }
+      ],
+      "answer": "B",
+      "answerText": "PC；",
+      "explanation": ""
+    },
+    {
+      "id": "C052",
+      "number": 52,
+      "chapter": "选择题 041-060",
+      "stem": "间址周期结束时，CPU内寄存器MDR中的内容为（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "指令"
+        },
+        {
+          "key": "B",
+          "text": "操作数"
+        },
+        {
+          "key": "C",
+          "text": "操作数地址"
+        },
+        {
+          "key": "D",
+          "text": "无法确定"
+        }
+      ],
+      "answer": "C",
+      "answerText": "操作数地址",
+      "explanation": ""
+    },
+    {
+      "id": "C053",
+      "number": 53,
+      "chapter": "选择题 041-060",
+      "stem": "中断发生时，由硬件更新程序计数器，而不是由软件完成，主要是为了（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "提高处理机的速度"
+        },
+        {
+          "key": "B",
+          "text": "节约内存"
+        },
+        {
+          "key": "C",
+          "text": "使中断处理程序易于编址，不易出错"
+        },
+        {
+          "key": "D",
+          "text": "进入中断处理程序并正确返回源程序"
+        }
+      ],
+      "answer": "A",
+      "answerText": "提高处理机的速度",
+      "explanation": ""
+    },
+    {
+      "id": "C054",
+      "number": 54,
+      "chapter": "选择题 041-060",
+      "stem": "采用扩展操作码的重要原则是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "满足整数边界原则"
+        },
+        {
+          "key": "B",
+          "text": "使用频率高的指令采用短操作码"
+        },
+        {
+          "key": "C",
+          "text": "使用频率低的指令采用短操作码"
+        },
+        {
+          "key": "D",
+          "text": "操作码长度可变"
+        }
+      ],
+      "answer": "B",
+      "answerText": "使用频率高的指令采用短操作码",
+      "explanation": ""
+    },
+    {
+      "id": "C055",
+      "number": 55,
+      "chapter": "选择题 041-060",
+      "stem": "采用以下哪种寻址方式的指令访问内存的次数最少（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "堆栈寻址"
+        },
+        {
+          "key": "B",
+          "text": "间接寻址"
+        },
+        {
+          "key": "C",
+          "text": "寄存器寻址"
+        },
+        {
+          "key": "D",
+          "text": "相对寻址"
+        }
+      ],
+      "answer": "C",
+      "answerText": "寄存器寻址",
+      "explanation": ""
+    },
+    {
+      "id": "C056",
+      "number": 56,
+      "chapter": "选择题 041-060",
+      "stem": "某机字长8位．采用补码形式(其中1位为符号位)，则机器数所能表示的范围是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "-128～127"
+        },
+        {
+          "key": "B",
+          "text": "-127～127"
+        },
+        {
+          "key": "C",
+          "text": "-128～128"
+        },
+        {
+          "key": "D",
+          "text": "-127～128"
+        }
+      ],
+      "answer": "A",
+      "answerText": "-128～127",
+      "explanation": ""
+    },
+    {
+      "id": "C057",
+      "number": 57,
+      "chapter": "选择题 041-060",
+      "stem": "计算机操作的最小时间单位是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "指令周期"
+        },
+        {
+          "key": "B",
+          "text": "CPU周期"
+        },
+        {
+          "key": "C",
+          "text": "时钟周期"
+        },
+        {
+          "key": "D",
+          "text": "外设周期"
+        }
+      ],
+      "answer": "C",
+      "answerText": "时钟周期",
+      "explanation": ""
+    },
+    {
+      "id": "C058",
+      "number": 58,
+      "chapter": "选择题 041-060",
+      "stem": "变址寻址和基址寻址的有效地址形成方式类似，但是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "变址寄存器的内容在程序执行过程中是可变的。"
+        },
+        {
+          "key": "B",
+          "text": "在程序执行过程中，基址寄存器的内容不可变，变址寄存器中的内容可变；"
+        },
+        {
+          "key": "C",
+          "text": "在程序执行过程中，变址寄存器和基址寄存器和内容都可变的；"
+        },
+        {
+          "key": "D",
+          "text": "变址寄存器的内容在程序执行过程中是不可变的；"
+        }
+      ],
+      "answer": "B",
+      "answerText": "在程序执行过程中，基址寄存器的内容不可变，变址寄存器中的内容可变；",
+      "explanation": ""
+    },
+    {
+      "id": "C059",
+      "number": 59,
+      "chapter": "选择题 041-060",
+      "stem": "在中断系统中，CPU一旦响应中断，为防止本次中断任务结束前同级的其他中断源产生另一次中断进行干扰，需关闭的标志是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "中断屏蔽"
+        },
+        {
+          "key": "B",
+          "text": "中断重启"
+        },
+        {
+          "key": "C",
+          "text": "中断请求"
+        },
+        {
+          "key": "D",
+          "text": "中断允许"
+        }
+      ],
+      "answer": "D",
+      "answerText": "中断允许",
+      "explanation": ""
+    },
+    {
+      "id": "C060",
+      "number": 60,
+      "chapter": "选择题 041-060",
+      "stem": "某设备以中断方式与 CPU 进行数据交换，CPU 主频为 1GHz，设备接口中的数据缓冲寄存器为 32 位，设备的数据传输率为 50kB/s。若每次中断开销（包括中断响应和中断处理）为 1000 个时钟周期，则 CPU 用于该设备输入/输出的时间占整个 CPU 时间的百分比最多是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "12.5%"
+        },
+        {
+          "key": "B",
+          "text": "5%"
+        },
+        {
+          "key": "C",
+          "text": "2.5%"
+        },
+        {
+          "key": "D",
+          "text": "1.25%"
+        }
+      ],
+      "answer": "D",
+      "answerText": "1.25%",
+      "explanation": ""
+    },
+    {
+      "id": "C061",
+      "number": 61,
+      "chapter": "选择题 061-080",
+      "stem": "假定计算机M1和M2具有相同的指令集体系结构（ISA），主频分别为1.5GHz和1.2GHz。在M1和M2上运行某基准程序P，平均CPI分别为2和1，则程序P在M1和M2上运行时间的比值是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "1.6"
+        },
+        {
+          "key": "B",
+          "text": "0.625"
+        },
+        {
+          "key": "C",
+          "text": "2.5"
+        },
+        {
+          "key": "D",
+          "text": "0.4"
+        }
+      ],
+      "answer": "A",
+      "answerText": "1.6",
+      "explanation": ""
+    },
+    {
+      "id": "C062",
+      "number": 62,
+      "chapter": "选择题 061-080",
+      "stem": "在组合逻辑控制器中,微操作控制信号的形成主要与（ ）信号有关。",
+      "options": [
+        {
+          "key": "A",
+          "text": "指令操作码和地址码"
+        },
+        {
+          "key": "B",
+          "text": ".操作码和条件码"
+        },
+        {
+          "key": "C",
+          "text": "状态信息和条件"
+        },
+        {
+          "key": "D",
+          "text": "指令译码信号和时钟"
+        }
+      ],
+      "answer": "D",
+      "answerText": "指令译码信号和时钟",
+      "explanation": ""
+    },
+    {
+      "id": "C063",
+      "number": 63,
+      "chapter": "选择题 061-080",
+      "stem": "三种集中式控制方式中，（ ）对故障最敏感",
+      "options": [
+        {
+          "key": "A",
+          "text": "计数器定时查询"
+        },
+        {
+          "key": "B",
+          "text": "独立请求"
+        },
+        {
+          "key": "C",
+          "text": "链式查询"
+        },
+        {
+          "key": "D",
+          "text": "以上都不正确"
+        }
+      ],
+      "answer": "C",
+      "answerText": "链式查询",
+      "explanation": "(链式查询):一旦接口损坏，后续接口将不能收到总线同意信号 (计数器定时查询):某接口损坏，不影响其他接口"
+    },
+    {
+      "id": "C064",
+      "number": 64,
+      "chapter": "选择题 061-080",
+      "stem": "CPU中，跟踪指令后继地址的寄存器是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "IR"
+        },
+        {
+          "key": "B",
+          "text": "MDR"
+        },
+        {
+          "key": "C",
+          "text": "MAR"
+        },
+        {
+          "key": "D",
+          "text": "PC"
+        }
+      ],
+      "answer": "D",
+      "answerText": "PC",
+      "explanation": "(MAR):内存地址寄存器，每当cpu要发出一个地址时，均将地址先置于MAR中，然后通过后者发送到地址总线上。 (IR):指令寄存器，每当cpu取回一条指令之后，均将指令暂时存于IR (MDR):内存数据寄存器，直接连到数据总线，无论cpu读回还是写出信息，都要通过MDR中转"
+    },
+    {
+      "id": "C065",
+      "number": 65,
+      "chapter": "选择题 061-080",
+      "stem": "在中断周期中，由（ ）将允许中断触发位置0。",
+      "options": [
+        {
+          "key": "A",
+          "text": "关中断指令"
+        },
+        {
+          "key": "B",
+          "text": "开中断指令"
+        },
+        {
+          "key": "C",
+          "text": "中断隐指令"
+        },
+        {
+          "key": "D",
+          "text": "中断服务程序"
+        }
+      ],
+      "answer": "C",
+      "answerText": "中断隐指令",
+      "explanation": ""
+    },
+    {
+      "id": "C066",
+      "number": 66,
+      "chapter": "选择题 061-080",
+      "stem": "计算机工作的最小时间周期是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "指令周期"
+        },
+        {
+          "key": "B",
+          "text": "工作脉冲"
+        },
+        {
+          "key": "C",
+          "text": "时钟周期"
+        },
+        {
+          "key": "D",
+          "text": "CPU周期"
+        }
+      ],
+      "answer": "C",
+      "answerText": "时钟周期",
+      "explanation": ""
+    },
+    {
+      "id": "C067",
+      "number": 67,
+      "chapter": "选择题 061-080",
+      "stem": "下列哪—项不是Flash存储器的应用场合（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "高速缓存"
+        },
+        {
+          "key": "B",
+          "text": "U盘"
+        },
+        {
+          "key": "C",
+          "text": "SD卡"
+        },
+        {
+          "key": "D",
+          "text": "固态硬盘（SSD）"
+        }
+      ],
+      "answer": "A",
+      "answerText": "高速缓存",
+      "explanation": ""
+    },
+    {
+      "id": "C068",
+      "number": 68,
+      "chapter": "选择题 061-080",
+      "stem": "指令周期是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "以上都不正确"
+        },
+        {
+          "key": "B",
+          "text": "CPU从主存取出一条指令加上执行这条指令的时间"
+        },
+        {
+          "key": "C",
+          "text": "CPU执行一条指令的时间"
+        },
+        {
+          "key": "D",
+          "text": "CPU从主存取出一条指令的时间"
+        }
+      ],
+      "answer": "B",
+      "answerText": "CPU从主存取出一条指令加上执行这条指令的时间",
+      "explanation": ""
+    },
+    {
+      "id": "C069",
+      "number": 69,
+      "chapter": "选择题 061-080",
+      "stem": "某机器的微指令格式中,共有8个控制字段,每个字段可分别激活5､8､3､16､1､7､25､4中控制信号。若采用直接编码方式设计微指令的操作控制字段,则其操作控制字段应该取（ ）位。",
+      "options": [
+        {
+          "key": "A",
+          "text": "69"
+        },
+        {
+          "key": "B",
+          "text": "37"
+        },
+        {
+          "key": "C",
+          "text": "26"
+        },
+        {
+          "key": "D",
+          "text": "21"
+        }
+      ],
+      "answer": "A",
+      "answerText": "69",
+      "explanation": ""
+    },
+    {
+      "id": "C070",
+      "number": 70,
+      "chapter": "选择题 061-080",
+      "stem": "中断向量可提供（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "传送数据的起始地址；"
+        },
+        {
+          "key": "B",
+          "text": "中断服务程序入口地址；"
+        },
+        {
+          "key": "C",
+          "text": "被选中设备的地址；"
+        },
+        {
+          "key": "D",
+          "text": "主程序的断点地址。"
+        }
+      ],
+      "answer": "B",
+      "answerText": "中断服务程序入口地址；",
+      "explanation": ""
+    },
+    {
+      "id": "C071",
+      "number": 71,
+      "chapter": "选择题 061-080",
+      "stem": "长度相同但格式不同的2种浮点数，假定前者阶码长、尾数短，后者阶码短、尾数长，其他规定均相同，则它们可表示的数的范围和精度之间的关系为（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "前者可表示的数的范围大但精度低"
+        },
+        {
+          "key": "B",
+          "text": "后者可表示数的范围大且精度高"
+        },
+        {
+          "key": "C",
+          "text": "两者可表示数的范围和精度相同"
+        },
+        {
+          "key": "D",
+          "text": "前者可表示的数的范围大且精度高"
+        }
+      ],
+      "answer": "A",
+      "answerText": "前者可表示的数的范围大但精度低",
+      "explanation": ""
+    },
+    {
+      "id": "C072",
+      "number": 72,
+      "chapter": "选择题 061-080",
+      "stem": "在独立请求的方式下，若有N个设备，则（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "有一个总线请求信号和N个总线响应信号"
+        },
+        {
+          "key": "B",
+          "text": "有一个总线请求信号和一个总线响应信号"
+        },
+        {
+          "key": "C",
+          "text": "有N个总线请求信号和N个总线响应信号"
+        },
+        {
+          "key": "D",
+          "text": "以上都不正确"
+        }
+      ],
+      "answer": "C",
+      "answerText": "有N个总线请求信号和N个总线响应信号",
+      "explanation": ""
+    },
+    {
+      "id": "C073",
+      "number": 73,
+      "chapter": "选择题 061-080",
+      "stem": "控制器的全部功能是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "从主存取出指令并完成指令操作码译码"
+        },
+        {
+          "key": "B",
+          "text": "产生时序信号"
+        },
+        {
+          "key": "C",
+          "text": "从主存取出指令、分析指令并产生有关的操作控制信号"
+        },
+        {
+          "key": "D",
+          "text": "以上都不正确"
+        }
+      ],
+      "answer": "C",
+      "answerText": "从主存取出指令、分析指令并产生有关的操作控制信号",
+      "explanation": ""
+    },
+    {
+      "id": "C074",
+      "number": 74,
+      "chapter": "选择题 061-080",
+      "stem": "若[X]补=0.1101010，则[X]原=",
+      "options": [
+        {
+          "key": "A",
+          "text": "0.0010110"
+        },
+        {
+          "key": "B",
+          "text": "1.0010101"
+        },
+        {
+          "key": "C",
+          "text": "1.0010110"
+        },
+        {
+          "key": "D",
+          "text": "0.1101010"
+        }
+      ],
+      "answer": "D",
+      "answerText": "0.1101010",
+      "explanation": ""
+    },
+    {
+      "id": "C075",
+      "number": 75,
+      "chapter": "选择题 061-080",
+      "stem": "总线的半同步通信方式（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "既不采用时钟信号，又不采用握手信号"
+        },
+        {
+          "key": "B",
+          "text": "既采用时钟信号，又采用握手信号"
+        },
+        {
+          "key": "C",
+          "text": "以上都不正确"
+        },
+        {
+          "key": "D",
+          "text": "不采用时钟信号，只采用握手信号"
+        }
+      ],
+      "answer": "B",
+      "answerText": "既采用时钟信号，又采用握手信号",
+      "explanation": ""
+    },
+    {
+      "id": "C076",
+      "number": 76,
+      "chapter": "选择题 061-080",
+      "stem": "I/O端口与主存统—编址时，能够区分存储单元和I/O端口的是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "不同的地址码"
+        },
+        {
+          "key": "B",
+          "text": "不同的控制线"
+        },
+        {
+          "key": "C",
+          "text": "不同的地址线"
+        },
+        {
+          "key": "D",
+          "text": "不同的控制码"
+        }
+      ],
+      "answer": "A",
+      "answerText": "不同的地址码",
+      "explanation": ""
+    },
+    {
+      "id": "C077",
+      "number": 77,
+      "chapter": "选择题 061-080",
+      "stem": "中断发生时，程序计数器内容的保护和更新是由（ ）完成的。",
+      "options": [
+        {
+          "key": "A",
+          "text": "中断服务程序"
+        },
+        {
+          "key": "B",
+          "text": "进栈指令和转移指令"
+        },
+        {
+          "key": "C",
+          "text": "硬件自动"
+        },
+        {
+          "key": "D",
+          "text": "访存指令"
+        }
+      ],
+      "answer": "C",
+      "answerText": "硬件自动",
+      "explanation": ""
+    },
+    {
+      "id": "C078",
+      "number": 78,
+      "chapter": "选择题 061-080",
+      "stem": "在三种集中式控制方式中（ ）方式响应最快",
+      "options": [
+        {
+          "key": "A",
+          "text": "独立请求"
+        },
+        {
+          "key": "B",
+          "text": "链式查询"
+        },
+        {
+          "key": "C",
+          "text": "以上都不正确"
+        },
+        {
+          "key": "D",
+          "text": "计数器定时查询"
+        }
+      ],
+      "answer": "A",
+      "answerText": "独立请求",
+      "explanation": "(独立请求):cpu内部可直接判定，因此最快 (链式查询):需传递同意信号 (计数器定时查询):需不断计数"
+    },
+    {
+      "id": "C079",
+      "number": 79,
+      "chapter": "选择题 061-080",
+      "stem": "微程序放在（ ）中。",
+      "options": [
+        {
+          "key": "A",
+          "text": "内存储器"
+        },
+        {
+          "key": "B",
+          "text": "指令寄存器"
+        },
+        {
+          "key": "C",
+          "text": "RAM"
+        },
+        {
+          "key": "D",
+          "text": "控制存储器"
+        }
+      ],
+      "answer": "D",
+      "answerText": "控制存储器",
+      "explanation": ""
+    },
+    {
+      "id": "C080",
+      "number": 80,
+      "chapter": "选择题 061-080",
+      "stem": "微指令格式分为水平型和垂直型,水平型微指令的位数（ ）,用它编写的微程序 （ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "较多,较长"
+        },
+        {
+          "key": "B",
+          "text": "较长,较短"
+        },
+        {
+          "key": "C",
+          "text": "较少,较短"
+        },
+        {
+          "key": "D",
+          "text": "较短,较少"
+        }
+      ],
+      "answer": "B",
+      "answerText": "较长,较短",
+      "explanation": ""
+    },
+    {
+      "id": "C081",
+      "number": 81,
+      "chapter": "选择题 081-100",
+      "stem": "某SRAM芯片，存储容量为64K×16位，该芯片的地址线和数据线数目分别为（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "16和16"
+        },
+        {
+          "key": "B",
+          "text": "64和16"
+        },
+        {
+          "key": "C",
+          "text": "64和8"
+        },
+        {
+          "key": "D",
+          "text": "16和64"
+        }
+      ],
+      "answer": "A",
+      "answerText": "16和16",
+      "explanation": ""
+    },
+    {
+      "id": "C082",
+      "number": 82,
+      "chapter": "选择题 081-100",
+      "stem": "两个浮点数相加，阶码用原码表示，一个数的阶码为6，另一个数的阶码为10，则需要将阶码较小的浮点数的小数点（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "左移4位"
+        },
+        {
+          "key": "B",
+          "text": "左移2位"
+        },
+        {
+          "key": "C",
+          "text": "右移2位"
+        },
+        {
+          "key": "D",
+          "text": "右移4位"
+        }
+      ],
+      "answer": "A",
+      "answerText": "左移4位",
+      "explanation": ""
+    },
+    {
+      "id": "C083",
+      "number": 83,
+      "chapter": "选择题 081-100",
+      "stem": "某带中断的计算机指令系统共有101种操作,采用微程序控制方式时,控制存储器中相应最少有（ ）个微程序。",
+      "options": [
+        {
+          "key": "A",
+          "text": "102"
+        },
+        {
+          "key": "B",
+          "text": "101"
+        },
+        {
+          "key": "C",
+          "text": "104"
+        },
+        {
+          "key": "D",
+          "text": "103"
+        }
+      ],
+      "answer": "D",
+      "answerText": "103",
+      "explanation": ""
+    },
+    {
+      "id": "C084",
+      "number": 84,
+      "chapter": "选择题 081-100",
+      "stem": "采用规格化的浮点数最主要是为了（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "防止运算时数据溢出"
+        },
+        {
+          "key": "B",
+          "text": "方便浮点运算"
+        },
+        {
+          "key": "C",
+          "text": "增加数据的表示精度"
+        },
+        {
+          "key": "D",
+          "text": "增加数据的表示范围"
+        }
+      ],
+      "answer": "C",
+      "answerText": "增加数据的表示精度",
+      "explanation": ""
+    },
+    {
+      "id": "C085",
+      "number": 85,
+      "chapter": "选择题 081-100",
+      "stem": "总线通信中的同步控制是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "只适合于CPU控制的方式"
+        },
+        {
+          "key": "B",
+          "text": "只适合外围设备控制的方式"
+        },
+        {
+          "key": "C",
+          "text": "由统一的时序控制方式"
+        },
+        {
+          "key": "D",
+          "text": "以上都不正确"
+        }
+      ],
+      "answer": "C",
+      "answerText": "由统一的时序控制方式",
+      "explanation": "(由统一的时序控制方式):同步是一种通信机制，CPU和外设都可采用"
+    },
+    {
+      "id": "C086",
+      "number": 86,
+      "chapter": "选择题 081-100",
+      "stem": "设CPU地址总线有24根，数据总线有32根，用512K×8位的RAM芯片构成该主机存储器，则该主机最多需要（ ）片这样的存储芯片",
+      "options": [
+        {
+          "key": "A",
+          "text": "512"
+        },
+        {
+          "key": "B",
+          "text": "256"
+        },
+        {
+          "key": "C",
+          "text": "128"
+        },
+        {
+          "key": "D",
+          "text": "64"
+        }
+      ],
+      "answer": "C",
+      "answerText": "128",
+      "explanation": ""
+    },
+    {
+      "id": "C087",
+      "number": 87,
+      "chapter": "选择题 081-100",
+      "stem": "CPU与外设间使用程序查询方式进行数据传输，CPU通过下述哪个接口中的信息可以判断外设是否就绪（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "地址译码器"
+        },
+        {
+          "key": "B",
+          "text": "命令端口"
+        },
+        {
+          "key": "C",
+          "text": "状态端口"
+        },
+        {
+          "key": "D",
+          "text": "数据端"
+        }
+      ],
+      "answer": "C",
+      "answerText": "状态端口",
+      "explanation": ""
+    },
+    {
+      "id": "C088",
+      "number": 88,
+      "chapter": "选择题 081-100",
+      "stem": "下列哪种总线仲裁方式不属于集中式仲裁（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "计数链式仲裁"
+        },
+        {
+          "key": "B",
+          "text": "串行链式仲裁"
+        },
+        {
+          "key": "C",
+          "text": "独立请求式仲裁"
+        },
+        {
+          "key": "D",
+          "text": "自举式仲裁"
+        }
+      ],
+      "answer": "D",
+      "answerText": "自举式仲裁",
+      "explanation": ""
+    },
+    {
+      "id": "C089",
+      "number": 89,
+      "chapter": "选择题 081-100",
+      "stem": "磁盘属于（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "直接存储器"
+        },
+        {
+          "key": "B",
+          "text": "只读存储器"
+        },
+        {
+          "key": "C",
+          "text": "随机存取存储器"
+        },
+        {
+          "key": "D",
+          "text": "顺序存储器"
+        }
+      ],
+      "answer": "A",
+      "answerText": "直接存储器",
+      "explanation": ""
+    },
+    {
+      "id": "C090",
+      "number": 90,
+      "chapter": "选择题 081-100",
+      "stem": "DMA方式数据的传送是以（ ）（ ）为单位进行的。",
+      "options": [
+        {
+          "key": "A",
+          "text": "字节"
+        },
+        {
+          "key": "B",
+          "text": "字"
+        },
+        {
+          "key": "C",
+          "text": "数据块"
+        },
+        {
+          "key": "D",
+          "text": "位"
+        }
+      ],
+      "answer": "C",
+      "answerText": "数据块",
+      "explanation": ""
+    },
+    {
+      "id": "C091",
+      "number": 91,
+      "chapter": "选择题 081-100",
+      "stem": "假定用若干个2K×4位芯片组成一个8K×8位存储器，则0B1FH所在芯片的最小地址是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "0800H"
+        },
+        {
+          "key": "B",
+          "text": "0700H"
+        },
+        {
+          "key": "C",
+          "text": "0600H"
+        },
+        {
+          "key": "D",
+          "text": "0000H"
+        }
+      ],
+      "answer": "A",
+      "answerText": "0800H",
+      "explanation": "(0800H):芯片为2k，所以11条地址线。当11条为全零时，选中该芯片最小地址。所以用0x1BF与11个0相与，得到0x0800"
+    },
+    {
+      "id": "C092",
+      "number": 92,
+      "chapter": "选择题 081-100",
+      "stem": "浮点运算中，下溢指的是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "运算的结果小于机器所能表示的最小正数"
+        },
+        {
+          "key": "B",
+          "text": "运算结果的最低有效位产生的错误"
+        },
+        {
+          "key": "C",
+          "text": "运算的结果小于机器所能表示的最小负数"
+        },
+        {
+          "key": "D",
+          "text": "运算结果的绝对值小于机器所能表示的最小绝对值"
+        }
+      ],
+      "answer": "D",
+      "answerText": "运算结果的绝对值小于机器所能表示的最小绝对值",
+      "explanation": ""
+    },
+    {
+      "id": "C093",
+      "number": 93,
+      "chapter": "选择题 081-100",
+      "stem": "存储器采用哈佛结构可以解决指令流水线中的（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "读写冲突"
+        },
+        {
+          "key": "B",
+          "text": "控制冲突"
+        },
+        {
+          "key": "C",
+          "text": "数据冲突"
+        },
+        {
+          "key": "D",
+          "text": "结构冲突"
+        }
+      ],
+      "answer": "D",
+      "answerText": "结构冲突",
+      "explanation": ""
+    },
+    {
+      "id": "C094",
+      "number": 94,
+      "chapter": "选择题 081-100",
+      "stem": "某计算机有4级中断，优先级从高到低为1→2→3→4。若优先级顺序修改,改后1级中断屏蔽字为1101,2级中断屏蔽字为0100,3级中断屏蔽字为1111,4级中断屏蔽字为0101,则修改后的优先顺序从高到低为（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "3→1→4→2"
+        },
+        {
+          "key": "B",
+          "text": "2→1→3→4"
+        },
+        {
+          "key": "C",
+          "text": "1→2→3→4"
+        },
+        {
+          "key": "D",
+          "text": "3→2→4→1"
+        }
+      ],
+      "answer": "A",
+      "answerText": "3→1→4→2",
+      "explanation": ""
+    },
+    {
+      "id": "C095",
+      "number": 95,
+      "chapter": "选择题 081-100",
+      "stem": "某CPU主频为1.03GHz，采用4级指令流水线，每个流水段的执行需要1个时钟周期。假定CPU执行了100条指令，在其执行过程中，没有发生任何流水线阻塞，此时流水线的吞吐率是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "1.0 *10^9条指令/秒"
+        },
+        {
+          "key": "B",
+          "text": "1.03*10^9条指令/秒"
+        },
+        {
+          "key": "C",
+          "text": "0.97*10^9条指令/秒"
+        },
+        {
+          "key": "D",
+          "text": "0.25*10^9条指令/秒"
+        }
+      ],
+      "answer": "A",
+      "answerText": "1.0 *10^9条指令/秒",
+      "explanation": "(1.0 *10^9条指令/秒):执行100条指令需要103个时钟，1秒钟包括1.03*10^9个时钟，故能执行100*10^7条指令，故为10^9条指令。"
+    },
+    {
+      "id": "C096",
+      "number": 96,
+      "chapter": "选择题 081-100",
+      "stem": "DMA方式的数据交换不是由CPU执行一段程序完成，而是在哪些设备之间建立一条逻辑上的直接数据通路，由DMA控制器来实现的？（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "I/O接口与CPU之间"
+        },
+        {
+          "key": "B",
+          "text": "CPU与主存之间"
+        },
+        {
+          "key": "C",
+          "text": "I/O接口之间"
+        },
+        {
+          "key": "D",
+          "text": "I/O接口与主存之间"
+        }
+      ],
+      "answer": "D",
+      "answerText": "I/O接口与主存之间",
+      "explanation": ""
+    },
+    {
+      "id": "C097",
+      "number": 97,
+      "chapter": "选择题 081-100",
+      "stem": "RISC是以下哪种指令系统计算机的简称（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "精简指令系统计算机"
+        },
+        {
+          "key": "B",
+          "text": "算术指令系统计算机"
+        },
+        {
+          "key": "C",
+          "text": "变长指令系统计算机"
+        },
+        {
+          "key": "D",
+          "text": "复杂指令系统计算机"
+        }
+      ],
+      "answer": "A",
+      "answerText": "精简指令系统计算机",
+      "explanation": "(精简指令系统计算机):教材P326"
+    },
+    {
+      "id": "C098",
+      "number": 98,
+      "chapter": "选择题 081-100",
+      "stem": "C语言的float型数据通常用IEE754单精度浮点数格式表示。若编译器将float型变量x分配在一个32位浮点寄存器FR1中，且x=-8.25，则FR1的内容是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "C1040000H"
+        },
+        {
+          "key": "B",
+          "text": "C2420000H"
+        },
+        {
+          "key": "C",
+          "text": "C1840000H"
+        },
+        {
+          "key": "D",
+          "text": "C1C20000H"
+        }
+      ],
+      "answer": "A",
+      "answerText": "C1040000H",
+      "explanation": ""
+    },
+    {
+      "id": "C099",
+      "number": 99,
+      "chapter": "选择题 081-100",
+      "stem": "某机器采用16位单字长指令，采用定长操作码，地址码为5位，现已定义60条二地址指令，那么单地址指令最多有（ ）条；若采用扩展操作码，那么单地址指令最多有（ ）条。",
+      "options": [
+        {
+          "key": "A",
+          "text": "4，128"
+        },
+        {
+          "key": "B",
+          "text": "6，64"
+        },
+        {
+          "key": "C",
+          "text": "4，64"
+        },
+        {
+          "key": "D",
+          "text": "6，128"
+        }
+      ],
+      "answer": "A",
+      "answerText": "4，128",
+      "explanation": "(4，128):不扩展时，6位操作码有64种可能性，减去60条，还剩4条；如果采用扩展操作码，5位可以扩展32条，乘以4，即为128条"
+    },
+    {
+      "id": "C100",
+      "number": 100,
+      "chapter": "选择题 081-100",
+      "stem": "微程序控制器的速度比组合逻辑控制器慢,主要是因为（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "增加了从磁盘存储器读取微指令的时间"
+        },
+        {
+          "key": "B",
+          "text": "增加了从指令寄存器读取微指令的时间"
+        },
+        {
+          "key": "C",
+          "text": "增加了从控制存储器读取微指令的时间"
+        },
+        {
+          "key": "D",
+          "text": "增加了从主存读取微指令的时间"
+        }
+      ],
+      "answer": "C",
+      "answerText": "增加了从控制存储器读取微指令的时间",
+      "explanation": ""
+    },
+    {
+      "id": "C101",
+      "number": 101,
+      "chapter": "选择题 101-120",
+      "stem": "冯·诺伊曼计算机中指令和数据均以二进制形式存放在存储器中，CPU区分它们的依据是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "指令和数据所在的存储单元"
+        },
+        {
+          "key": "B",
+          "text": "指令和数据的寻址方式"
+        },
+        {
+          "key": "C",
+          "text": "指令周期的不同阶段"
+        },
+        {
+          "key": "D",
+          "text": "指令操作码的译码结果"
+        }
+      ],
+      "answer": "C",
+      "answerText": "指令周期的不同阶段",
+      "explanation": ""
+    },
+    {
+      "id": "C102",
+      "number": 102,
+      "chapter": "选择题 101-120",
+      "stem": "某机器的微指令格式中,共有8个控制字段,每个字段可分别激活5､8､3､16､1､7､25､4中控制信号。若采用字段直接编码方式设计微指令的操作控制字段,则其操作控制字段应该取（ ）位。",
+      "options": [
+        {
+          "key": "A",
+          "text": "37"
+        },
+        {
+          "key": "B",
+          "text": "21"
+        },
+        {
+          "key": "C",
+          "text": "69"
+        },
+        {
+          "key": "D",
+          "text": "26"
+        }
+      ],
+      "answer": "D",
+      "answerText": "26",
+      "explanation": ""
+    },
+    {
+      "id": "C103",
+      "number": 103,
+      "chapter": "选择题 101-120",
+      "stem": "某计算机的指令流水线由4个功能段组成，指令流经各个功能段的时间（忽略各功能段之间的缓存时间）分别为85ns、80ns、70ns和60ns，则该计算机的CPU机器周期至少是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "85ns"
+        },
+        {
+          "key": "B",
+          "text": "90ns"
+        },
+        {
+          "key": "C",
+          "text": "60ns"
+        },
+        {
+          "key": "D",
+          "text": "70ns"
+        }
+      ],
+      "answer": "A",
+      "answerText": "85ns",
+      "explanation": "(85ns):取最大值"
+    },
+    {
+      "id": "C104",
+      "number": 104,
+      "chapter": "选择题 101-120",
+      "stem": "定点补码加法运算中，（ ）时表明数据发生了溢出。",
+      "options": [
+        {
+          "key": "A",
+          "text": "正负相加"
+        },
+        {
+          "key": "B",
+          "text": "双符号位相同"
+        },
+        {
+          "key": "C",
+          "text": "两个负数相加"
+        },
+        {
+          "key": "D",
+          "text": "双符号位不同"
+        }
+      ],
+      "answer": "D",
+      "answerText": "双符号位不同",
+      "explanation": ""
+    },
+    {
+      "id": "C105",
+      "number": 105,
+      "chapter": "选择题 101-120",
+      "stem": "假设某系统总线在一个总线周期中并行传输4字节信息，一个总线周期占用2个时钟周期，总线时钟频率为10MHz，则总线带宽是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "10MB/s"
+        },
+        {
+          "key": "B",
+          "text": "80MB/s"
+        },
+        {
+          "key": "C",
+          "text": "20MB/s"
+        },
+        {
+          "key": "D",
+          "text": "40MB/s"
+        }
+      ],
+      "answer": "C",
+      "answerText": "20MB/s",
+      "explanation": ""
+    },
+    {
+      "id": "C106",
+      "number": 106,
+      "chapter": "选择题 101-120",
+      "stem": "假定一个十进制数–66，按补码形式存放在一个8位寄存器中，该寄存器的内容用十六进制表示为（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "42H"
+        },
+        {
+          "key": "B",
+          "text": "BDH"
+        },
+        {
+          "key": "C",
+          "text": "BEH"
+        },
+        {
+          "key": "D",
+          "text": "C2H"
+        }
+      ],
+      "answer": "C",
+      "answerText": "BEH",
+      "explanation": ""
+    },
+    {
+      "id": "C107",
+      "number": 107,
+      "chapter": "选择题 101-120",
+      "stem": "下列选项中，描述浮点数操作速度指标的（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "MFLOPS"
+        },
+        {
+          "key": "B",
+          "text": "IPC"
+        },
+        {
+          "key": "C",
+          "text": "MIPS"
+        },
+        {
+          "key": "D",
+          "text": "CPI"
+        }
+      ],
+      "answer": "A",
+      "answerText": "MFLOPS",
+      "explanation": ""
+    },
+    {
+      "id": "C108",
+      "number": 108,
+      "chapter": "选择题 101-120",
+      "stem": "变址寻址方式中，操作数的有效地址是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "程序计数器内容加上形式地址；"
+        },
+        {
+          "key": "B",
+          "text": "变址寄存器内容加上形式地址；"
+        },
+        {
+          "key": "C",
+          "text": "以上都不对。"
+        },
+        {
+          "key": "D",
+          "text": "基址寄存器内容加上形式地址（位移量）；"
+        }
+      ],
+      "answer": "B",
+      "answerText": "变址寄存器内容加上形式地址；",
+      "explanation": ""
+    },
+    {
+      "id": "C109",
+      "number": 109,
+      "chapter": "选择题 101-120",
+      "stem": "下列有关运算器的描述中，（ ）是正确的。",
+      "options": [
+        {
+          "key": "A",
+          "text": "能暂时存放运算结果"
+        },
+        {
+          "key": "B",
+          "text": "既做算术运算，又做逻辑运算"
+        },
+        {
+          "key": "C",
+          "text": "只做算术运算，不做逻辑运算"
+        },
+        {
+          "key": "D",
+          "text": "只做加法"
+        }
+      ],
+      "answer": "B",
+      "answerText": "既做算术运算，又做逻辑运算",
+      "explanation": ""
+    },
+    {
+      "id": "C110",
+      "number": 110,
+      "chapter": "选择题 101-120",
+      "stem": "某计算机采用微程序控制器，共有64条指令，公共的取指令微程序包含3条微指令，各指令其他阶段对应的微程序平均包含4条微指令，采用断定法（下址字段法）确定下条微指令的地址，则微指令中下址字段的位数至少是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "8"
+        },
+        {
+          "key": "B",
+          "text": "9"
+        },
+        {
+          "key": "C",
+          "text": "7"
+        },
+        {
+          "key": "D",
+          "text": "6"
+        }
+      ],
+      "answer": "B",
+      "answerText": "9",
+      "explanation": ""
+    },
+    {
+      "id": "C111",
+      "number": 111,
+      "chapter": "选择题 101-120",
+      "stem": "计算机主存按字编址，转移指令采用相对寻址，由两个字组成，第一个字为操作码和寻址方式，第二个字为相对位移量。假定取指令时，每取一个字PC自动1。若某转移指令所在的主存地址为2000H，相对位移量的内容为06H，则该转移指令成功转移后的目标地址是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "2005"
+        },
+        {
+          "key": "B",
+          "text": "2007"
+        },
+        {
+          "key": "C",
+          "text": "2008"
+        },
+        {
+          "key": "D",
+          "text": "2006"
+        }
+      ],
+      "answer": "C",
+      "answerText": "2008",
+      "explanation": ""
+    },
+    {
+      "id": "C112",
+      "number": 112,
+      "chapter": "选择题 101-120",
+      "stem": "某计算机的控制器采用微程序控制方式,微指令中的操作控制字段采用字段直接编码法,共有46个微指令,构成6个互斥类,分别包含5.14.3.8.6和10个微命令,则操作控制字段至少有（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "7位"
+        },
+        {
+          "key": "B",
+          "text": "19位"
+        },
+        {
+          "key": "C",
+          "text": "20位"
+        },
+        {
+          "key": "D",
+          "text": "6位"
+        }
+      ],
+      "answer": "C",
+      "answerText": "20位",
+      "explanation": "(20位):需要的字段长度分别为3/4/2/4/3/4,合计20位｡8个信号之所以要用4个位编码,因为要至少留出一位来表示此时不发送任何信号｡"
+    },
+    {
+      "id": "C113",
+      "number": 113,
+      "chapter": "选择题 101-120",
+      "stem": "某计算机存储器按字节编址，采用小端方式存放数据。假定编译器规定int型和short型长度分别为32位和16位，并且数据按边界对齐存储。某C语言程序段如下： struct { int a; char b; short c; }record; record.a=273; 若record变量的首地址为0xC008，则0xC008中内容及record.c的地址是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "0x11.0xC00E"
+        },
+        {
+          "key": "B",
+          "text": "0x11.0xC00D"
+        },
+        {
+          "key": "C",
+          "text": "0x00、0xC00E"
+        },
+        {
+          "key": "D",
+          "text": "0x00、0xC00D"
+        }
+      ],
+      "answer": "A",
+      "answerText": "0x11.0xC00E",
+      "explanation": "(0x00、0xC00D):需自学何谓“边界对齐” (0x11.0xC00D):273变为二进制，取低八位，为0x11.成员a地址为0xC008-0xC00B，成员b为0xC00C,因为需对齐，所以0xC00D不使用，成员c地址为0xC00E和0xC00F。"
+    },
+    {
+      "id": "C114",
+      "number": 114,
+      "chapter": "选择题 101-120",
+      "stem": "32位计算机是指该计算机的CPU（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "能同时处理32个字符"
+        },
+        {
+          "key": "B",
+          "text": "—次运算能完成32位二进制数加法"
+        },
+        {
+          "key": "C",
+          "text": "具有32位寄存器"
+        },
+        {
+          "key": "D",
+          "text": "有32个寄存器"
+        }
+      ],
+      "answer": "B",
+      "answerText": "—次运算能完成32位二进制数加法",
+      "explanation": ""
+    },
+    {
+      "id": "C115",
+      "number": 115,
+      "chapter": "选择题 101-120",
+      "stem": "设指令流水线包括取指、分析、执行3个部分，且三个部分的时间分别是2ns、2ns、1ns，则50条指令完全执行完毕需要（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "203ns"
+        },
+        {
+          "key": "B",
+          "text": "103ns"
+        },
+        {
+          "key": "C",
+          "text": "102ns"
+        },
+        {
+          "key": "D",
+          "text": "202ns"
+        }
+      ],
+      "answer": "B",
+      "answerText": "103ns",
+      "explanation": "(103ns):每段时间取2ns，第一条指令执行完需要6ns，后续49条，每2ns一条，所以需要98ns，但是最后一条指令的最后一段，1ns即可，因不需与后续指令取最大值。所以为6+98-1=103ns。"
+    },
+    {
+      "id": "C116",
+      "number": 116,
+      "chapter": "选择题 101-120",
+      "stem": "某计算机处理器主频为50MHz，采用定时查询方式控制设备A的I/O，查询程序运行一次所用的时钟周期数至少为500。在设备A工作期间，为保证数据不丢失，每秒需对其查询至少200次，则CPU用于设备A的I/O的时间占整个CPU时间的百分比至少是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "0.02%"
+        },
+        {
+          "key": "B",
+          "text": "0.50%"
+        },
+        {
+          "key": "C",
+          "text": "0.20%"
+        },
+        {
+          "key": "D",
+          "text": "0.05%"
+        }
+      ],
+      "answer": "C",
+      "answerText": "0.20%",
+      "explanation": ""
+    },
+    {
+      "id": "C117",
+      "number": 117,
+      "chapter": "选择题 101-120",
+      "stem": "某指令系统有192条指令，对操作码采用固定长度二进制编码，最少需要用（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "8"
+        },
+        {
+          "key": "B",
+          "text": "4"
+        },
+        {
+          "key": "C",
+          "text": "16"
+        },
+        {
+          "key": "D",
+          "text": "32"
+        }
+      ],
+      "answer": "A",
+      "answerText": "8",
+      "explanation": ""
+    },
+    {
+      "id": "C118",
+      "number": 118,
+      "chapter": "选择题 101-120",
+      "stem": "寄存器间接寻址方式中，操作数处在（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "内存单元"
+        },
+        {
+          "key": "B",
+          "text": "运算器中的算术逻辑运算部件"
+        },
+        {
+          "key": "C",
+          "text": "通用寄存器"
+        },
+        {
+          "key": "D",
+          "text": "程序计数器"
+        }
+      ],
+      "answer": "A",
+      "answerText": "内存单元",
+      "explanation": ""
+    },
+    {
+      "id": "C119",
+      "number": 119,
+      "chapter": "选择题 101-120",
+      "stem": "假设变址寄存器R的内容为1000H，指令中的形式地址为2000H；地址1000H中的内容为2000H，地址2000H中的内容为3000H，地址3000H中的内容为4000H，则变址寻址方式下访问到的操作数是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "4000H"
+        },
+        {
+          "key": "B",
+          "text": "1000H"
+        },
+        {
+          "key": "C",
+          "text": "2000H"
+        },
+        {
+          "key": "D",
+          "text": "3000H"
+        }
+      ],
+      "answer": "A",
+      "answerText": "4000H",
+      "explanation": ""
+    },
+    {
+      "id": "C120",
+      "number": 120,
+      "chapter": "选择题 101-120",
+      "stem": "在定点二进制运算器中，减法运算一般通过下列哪个选项来实现（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "原码运算的二进制减法器"
+        },
+        {
+          "key": "B",
+          "text": "补码运算的二进制加法器"
+        },
+        {
+          "key": "C",
+          "text": "补码运算的二进制减法器"
+        },
+        {
+          "key": "D",
+          "text": "原码运算的二进制加法器"
+        }
+      ],
+      "answer": "B",
+      "answerText": "补码运算的二进制加法器",
+      "explanation": ""
+    },
+    {
+      "id": "C121",
+      "number": 121,
+      "chapter": "选择题 121-140",
+      "stem": "按指定内容—次找出其所在位置及其它相关内容的存储器是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "动态随机存储器"
+        },
+        {
+          "key": "B",
+          "text": "只读存储器"
+        },
+        {
+          "key": "C",
+          "text": "静态随机存储器"
+        },
+        {
+          "key": "D",
+          "text": "相联访问存储器"
+        }
+      ],
+      "answer": "D",
+      "answerText": "相联访问存储器",
+      "explanation": ""
+    },
+    {
+      "id": "C122",
+      "number": 122,
+      "chapter": "选择题 121-140",
+      "stem": "下列编码或标准中，数字0表示形式唯一的是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "补码"
+        },
+        {
+          "key": "B",
+          "text": "IEEE754的32位规格化浮点数标准"
+        },
+        {
+          "key": "C",
+          "text": "反码"
+        },
+        {
+          "key": "D",
+          "text": "原码"
+        }
+      ],
+      "answer": "A",
+      "answerText": "补码",
+      "explanation": ""
+    },
+    {
+      "id": "C123",
+      "number": 123,
+      "chapter": "选择题 121-140",
+      "stem": "对于RISC机和CISC机，以下说法错误的是（ ） 。",
+      "options": [
+        {
+          "key": "A",
+          "text": "RISC机和CISC机都在发展"
+        },
+        {
+          "key": "B",
+          "text": "对大多数计算任务来说， RISC机程序所用的指令条数比CISC机少"
+        },
+        {
+          "key": "C",
+          "text": "RISC机的指令平均字长比CISC机指令平均字长短"
+        },
+        {
+          "key": "D",
+          "text": "RISC机的指令条数比CISC机少"
+        }
+      ],
+      "answer": "B",
+      "answerText": "对大多数计算任务来说， RISC机程序所用的指令条数比CISC机少",
+      "explanation": "(对大多数计算任务来说， RISC机程序所用的指令条数比CISC机少):对于大多数计算任务来说，RISC机编写的程序会比CISC机编写的程序更长，这是因为RISC的指令都比较简单，CSIC中的一条复杂指令所完成的功能在RISC中可能要用几条指令才能实现，对于同一个源程序，显然RISC的指令条数要比CISC的多。"
+    },
+    {
+      "id": "C124",
+      "number": 124,
+      "chapter": "选择题 121-140",
+      "stem": "指令系统中采用不同寻址方式的目的主要是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "缩短指令长度、扩大寻址空间、提高编程灵活性"
+        },
+        {
+          "key": "B",
+          "text": "提供扩展操作码的可能并降低指令译码难度"
+        },
+        {
+          "key": "C",
+          "text": "可以直接访问外存"
+        },
+        {
+          "key": "D",
+          "text": "实现存储程序和程序控制"
+        }
+      ],
+      "answer": "A",
+      "answerText": "缩短指令长度、扩大寻址空间、提高编程灵活性",
+      "explanation": ""
+    },
+    {
+      "id": "C125",
+      "number": 125,
+      "chapter": "选择题 121-140",
+      "stem": "组合逻辑控制器相对于微程序控制器的优点是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "维护方便"
+        },
+        {
+          "key": "B",
+          "text": "速度快"
+        },
+        {
+          "key": "C",
+          "text": "结构简单清晰"
+        },
+        {
+          "key": "D",
+          "text": "更新指令容易"
+        }
+      ],
+      "answer": "B",
+      "answerText": "速度快",
+      "explanation": ""
+    },
+    {
+      "id": "C126",
+      "number": 126,
+      "chapter": "选择题 121-140",
+      "stem": "浮点数的表示范围和精度取决于（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "阶码采用的编码和尾数采用的编码"
+        },
+        {
+          "key": "B",
+          "text": "阶码的位数和尾数采用的编码"
+        },
+        {
+          "key": "C",
+          "text": "阶码的位数和尾数的位数"
+        },
+        {
+          "key": "D",
+          "text": "阶码采用的编码和尾数的位数"
+        }
+      ],
+      "answer": "C",
+      "answerText": "阶码的位数和尾数的位数",
+      "explanation": ""
+    },
+    {
+      "id": "C127",
+      "number": 127,
+      "chapter": "选择题 121-140",
+      "stem": "冯·诺依曼机工作方式的基本特点是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "按地址访问并顺序执行指令"
+        },
+        {
+          "key": "B",
+          "text": "堆栈操作"
+        },
+        {
+          "key": "C",
+          "text": "多指令流单数据流"
+        },
+        {
+          "key": "D",
+          "text": "存储器按内容选择地址"
+        }
+      ],
+      "answer": "A",
+      "answerText": "按地址访问并顺序执行指令",
+      "explanation": "(按地址访问并顺序执行指令):即为“存储程序”原理，将指令和数据都预先放在存储器中，逐条读取 (多指令流单数据流):实际并无此类型计算机 (堆栈操作):堆栈计算机是这样滴"
+    },
+    {
+      "id": "C128",
+      "number": 128,
+      "chapter": "选择题 121-140",
+      "stem": "微指令格式分为水平型和垂直型, 垂直型微指令的位数（ ）,用它编写的微程序 （ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "较少,较短"
+        },
+        {
+          "key": "B",
+          "text": "较多,较长"
+        },
+        {
+          "key": "C",
+          "text": "较少,较长"
+        },
+        {
+          "key": "D",
+          "text": "较长,较短"
+        }
+      ],
+      "answer": "C",
+      "answerText": "较少,较长",
+      "explanation": ""
+    },
+    {
+      "id": "C129",
+      "number": 129,
+      "chapter": "选择题 121-140",
+      "stem": "I/O指令实现的数据传送通常发生在（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "通用寄存器和l/O设备之间"
+        },
+        {
+          "key": "B",
+          "text": "I/O端口和I/O端口之间"
+        },
+        {
+          "key": "C",
+          "text": "通用寄存器和I/O端口之间"
+        },
+        {
+          "key": "D",
+          "text": "I/O设备和I/O端口之间"
+        }
+      ],
+      "answer": "C",
+      "answerText": "通用寄存器和I/O端口之间",
+      "explanation": ""
+    },
+    {
+      "id": "C130",
+      "number": 130,
+      "chapter": "选择题 121-140",
+      "stem": "在微程序控制器中,可以形成微程序入口地址的是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "机器指令的地址码字段"
+        },
+        {
+          "key": "B",
+          "text": "微指令的微地址码字段"
+        },
+        {
+          "key": "C",
+          "text": "机器指令的操作码字段"
+        },
+        {
+          "key": "D",
+          "text": "微指令的微操作码字段"
+        }
+      ],
+      "answer": "C",
+      "answerText": "机器指令的操作码字段",
+      "explanation": ""
+    },
+    {
+      "id": "C131",
+      "number": 131,
+      "chapter": "选择题 121-140",
+      "stem": "表示浮点数时，若要求机器零在计算机中的表示全“0”，则阶码应采用的编码是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "反码"
+        },
+        {
+          "key": "B",
+          "text": "移码"
+        },
+        {
+          "key": "C",
+          "text": "原码"
+        },
+        {
+          "key": "D",
+          "text": "补码"
+        }
+      ],
+      "answer": "B",
+      "answerText": "移码",
+      "explanation": ""
+    },
+    {
+      "id": "C132",
+      "number": 132,
+      "chapter": "选择题 121-140",
+      "stem": "微程序控制器中，机器指令与微指令的关系是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "每一条机器指令由一条微指令来执行"
+        },
+        {
+          "key": "B",
+          "text": "每一条机器指令由一段用微指令编成的微程序来解释执行"
+        },
+        {
+          "key": "C",
+          "text": "一条微指令由若干条机器指令组成"
+        },
+        {
+          "key": "D",
+          "text": "一段机器指令组成的程序可由一条微指令来执行"
+        }
+      ],
+      "answer": "B",
+      "answerText": "每一条机器指令由一段用微指令编成的微程序来解释执行",
+      "explanation": ""
+    },
+    {
+      "id": "C133",
+      "number": 133,
+      "chapter": "选择题 121-140",
+      "stem": "微程序控制器中,机器指令与微指令的关系是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "每一条机器指令由一条微指令来执行"
+        },
+        {
+          "key": "B",
+          "text": "若干条机器指令组成的程序可由一个微程序来执行"
+        },
+        {
+          "key": "C",
+          "text": "每一条机器指令由若干微指令组成的微程序来解释执行"
+        },
+        {
+          "key": "D",
+          "text": "每一条机器指令由若干微程序执行"
+        }
+      ],
+      "answer": "C",
+      "answerText": "每一条机器指令由若干微指令组成的微程序来解释执行",
+      "explanation": ""
+    },
+    {
+      "id": "C134",
+      "number": 134,
+      "chapter": "选择题 121-140",
+      "stem": "假定编译器规定int和short型长度分别为32位和16位，执行下列C语言语句; unsigned short x = 65530; unsigned int y = x; 得到y的机器数（十六进制，字母大写）为（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "FFFF 7FFA"
+        },
+        {
+          "key": "B",
+          "text": "0000 7FFA"
+        },
+        {
+          "key": "C",
+          "text": "FFFF FFFA"
+        },
+        {
+          "key": "D",
+          "text": "0000 FFFA"
+        }
+      ],
+      "answer": "D",
+      "answerText": "0000 FFFA",
+      "explanation": ""
+    },
+    {
+      "id": "C135",
+      "number": 135,
+      "chapter": "选择题 121-140",
+      "stem": "以下叙述中，不符合RISC指令系统特点的是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "寻址方式种类丰富，指令功能尽量增强"
+        },
+        {
+          "key": "B",
+          "text": "设置大量通用寄存器，访问存储器指令简单"
+        },
+        {
+          "key": "C",
+          "text": "指令长度固定，指令种类少"
+        },
+        {
+          "key": "D",
+          "text": "选取使用频率较高的一些简单指令"
+        }
+      ],
+      "answer": "A",
+      "answerText": "寻址方式种类丰富，指令功能尽量增强",
+      "explanation": ""
+    },
+    {
+      "id": "C136",
+      "number": 136,
+      "chapter": "选择题 121-140",
+      "stem": "下列关于RISC的叙述中，错误的是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "RISC的指令数、寻址方式和指令格式种类相对CISC少"
+        },
+        {
+          "key": "B",
+          "text": "RISC大多数指令在一个时钟周期内完成"
+        },
+        {
+          "key": "C",
+          "text": "RISC普遍采用微程序控制器"
+        },
+        {
+          "key": "D",
+          "text": "RISC的内部通用寄存器数量相对CISC多"
+        }
+      ],
+      "answer": "C",
+      "answerText": "RISC普遍采用微程序控制器",
+      "explanation": ""
+    },
+    {
+      "id": "C137",
+      "number": 137,
+      "chapter": "选择题 121-140",
+      "stem": "下列寄存器中，汇编语言程序员可见的是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "程序计数器（PC）"
+        },
+        {
+          "key": "B",
+          "text": "存储器数据寄存器（MDR）"
+        },
+        {
+          "key": "C",
+          "text": "存储器地址寄存器（MAR）"
+        },
+        {
+          "key": "D",
+          "text": "指令寄存器（IR）"
+        }
+      ],
+      "answer": "A",
+      "answerText": "程序计数器（PC）",
+      "explanation": ""
+    },
+    {
+      "id": "C138",
+      "number": 138,
+      "chapter": "选择题 121-140",
+      "stem": "假设某计算机的存储系统由主存和Cache组成。某程序执行过程中访存1000次，其中访问Cache缺失50次，则Cache的命中率是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "9.5%"
+        },
+        {
+          "key": "B",
+          "text": "95%"
+        },
+        {
+          "key": "C",
+          "text": "5%"
+        },
+        {
+          "key": "D",
+          "text": "50%"
+        }
+      ],
+      "answer": "B",
+      "answerText": "95%",
+      "explanation": ""
+    },
+    {
+      "id": "C139",
+      "number": 139,
+      "chapter": "选择题 121-140",
+      "stem": "采用以下哪种寻址方式的指令运行速度最快（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "基址寻址"
+        },
+        {
+          "key": "B",
+          "text": "寄存器间接寻址"
+        },
+        {
+          "key": "C",
+          "text": "立即数寻址"
+        },
+        {
+          "key": "D",
+          "text": "变址寻址"
+        }
+      ],
+      "answer": "C",
+      "answerText": "立即数寻址",
+      "explanation": ""
+    },
+    {
+      "id": "C140",
+      "number": 140,
+      "chapter": "选择题 121-140",
+      "stem": "在多级存储体系中，“Cache-主存”结构的作用是解决（ ）的问题。",
+      "options": [
+        {
+          "key": "A",
+          "text": "主存与辅存速度不匹配"
+        },
+        {
+          "key": "B",
+          "text": "主存与CPU速度不匹配"
+        },
+        {
+          "key": "C",
+          "text": "主存容量不足"
+        },
+        {
+          "key": "D",
+          "text": "辅存与CPU速度不匹配"
+        }
+      ],
+      "answer": "B",
+      "answerText": "主存与CPU速度不匹配",
+      "explanation": ""
+    },
+    {
+      "id": "C141",
+      "number": 141,
+      "chapter": "选择题 141-156",
+      "stem": "（ ）可区分存储单元中存放的是数据还是指令",
+      "options": [
+        {
+          "key": "A",
+          "text": "控制器"
+        },
+        {
+          "key": "B",
+          "text": "运算器"
+        },
+        {
+          "key": "C",
+          "text": "存储器"
+        },
+        {
+          "key": "D",
+          "text": "用户"
+        }
+      ],
+      "answer": "A",
+      "answerText": "控制器",
+      "explanation": "(控制器):唯有控制器了解当前指令执行到了哪个阶段，不同阶段取指令或者取数据的类别是不同的。取指阶段主要去指令，间址阶段取地址，执行阶段取数据，中断阶段存断点。"
+    },
+    {
+      "id": "C142",
+      "number": 142,
+      "chapter": "选择题 141-156",
+      "stem": "某计算机存储器按字节编址，主存地址空间大小为64MB，现用4M x 8 位的RAM 芯片组成32MB 的主存储器，则存储器地址寄存器MAR 的位数至少是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "25位"
+        },
+        {
+          "key": "B",
+          "text": "26位"
+        },
+        {
+          "key": "C",
+          "text": "23位"
+        },
+        {
+          "key": "D",
+          "text": "22位"
+        }
+      ],
+      "answer": "B",
+      "answerText": "26位",
+      "explanation": "(26位):MAR是cpu内部寄存器，属于cpu的固有特性，标志着该机器的最大寻址能力，与实际安装多少内存无关。"
+    },
+    {
+      "id": "C143",
+      "number": 143,
+      "chapter": "选择题 141-156",
+      "stem": "一次总线事务中，主设备只需给出一个首地址，从设备就能从首地址开始的若干连续单元读出或写入多个数据。这种总线事务方式称为（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "同步传输"
+        },
+        {
+          "key": "B",
+          "text": "串行传输"
+        },
+        {
+          "key": "C",
+          "text": "突发传输"
+        },
+        {
+          "key": "D",
+          "text": "并行传输"
+        }
+      ],
+      "answer": "C",
+      "answerText": "突发传输",
+      "explanation": ""
+    },
+    {
+      "id": "C144",
+      "number": 144,
+      "chapter": "选择题 141-156",
+      "stem": "下列非易失性存储器中，内容不能由用户改写的是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "Flash ROM"
+        },
+        {
+          "key": "B",
+          "text": "MROM"
+        },
+        {
+          "key": "C",
+          "text": "PROM"
+        },
+        {
+          "key": "D",
+          "text": "EPROM"
+        }
+      ],
+      "answer": "B",
+      "answerText": "MROM",
+      "explanation": ""
+    },
+    {
+      "id": "C145",
+      "number": 145,
+      "chapter": "选择题 141-156",
+      "stem": "相对于微程序控制器，硬布线控制器的特点是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "指令执行速度快，指令功能的修改和扩展容易"
+        },
+        {
+          "key": "B",
+          "text": "指令执行速度快，指令功能的修改和扩展难"
+        },
+        {
+          "key": "C",
+          "text": "指令执行速度慢，指令功能的修改和扩展容易"
+        },
+        {
+          "key": "D",
+          "text": "指令执行速度慢，指令功能的修改和扩展难"
+        }
+      ],
+      "answer": "B",
+      "answerText": "指令执行速度快，指令功能的修改和扩展难",
+      "explanation": ""
+    },
+    {
+      "id": "C146",
+      "number": 146,
+      "chapter": "选择题 141-156",
+      "stem": "同一个加法器既可以进行无符号数的加法运算，也可以进行补码的有符号数加法运算。下列说法正确的是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "无符号数和有符号数的加法运算均通过进位标志判断是否溢出"
+        },
+        {
+          "key": "B",
+          "text": "无符号数的加法运算通过进位标志判断是否溢出，有符号数的加法运算通过溢出标志判断是否溢出"
+        },
+        {
+          "key": "C",
+          "text": "无符号数的加法运算通过溢出标志判断是否溢出，有符号数的加法运算通过进位标志判断是否溢出"
+        },
+        {
+          "key": "D",
+          "text": "无符号数和有符号数的加法运算均通过溢出标志判断是否溢出"
+        }
+      ],
+      "answer": "B",
+      "answerText": "无符号数的加法运算通过进位标志判断是否溢出，有符号数的加法运算通过溢出标志判断是否溢出",
+      "explanation": ""
+    },
+    {
+      "id": "C147",
+      "number": 147,
+      "chapter": "选择题 141-156",
+      "stem": "某计算机的Cache共有32块，采用二路组相联映射方式（即每组两块）。每个储存块大小为32字节，按字节编址，主存第2000号字节所在的主存块应装入Cache组号是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "15"
+        },
+        {
+          "key": "B",
+          "text": "13"
+        },
+        {
+          "key": "C",
+          "text": "14"
+        },
+        {
+          "key": "D",
+          "text": "12"
+        }
+      ],
+      "answer": "C",
+      "answerText": "14",
+      "explanation": "(14):解析1：第2000号地址，就是地址是1999，1999÷32 =62.46875，块号是62，62 ÷ 16=3余数14。组号是14 解析2:1999=7CF=0111,1100,1111。组号是14"
+    },
+    {
+      "id": "C148",
+      "number": 148,
+      "chapter": "选择题 141-156",
+      "stem": "当主机与外设传送数据时，CPU的效率由高到低依次是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "程序中断方式、程序查询方式、DMA方式"
+        },
+        {
+          "key": "B",
+          "text": "程序查询方式、DMA方式、程序中断方式"
+        },
+        {
+          "key": "C",
+          "text": "程序中断方式、DMA方式、程序查询方式"
+        },
+        {
+          "key": "D",
+          "text": "DMA方式、程序中断方式、程序查询方式"
+        }
+      ],
+      "answer": "D",
+      "answerText": "DMA方式、程序中断方式、程序查询方式",
+      "explanation": ""
+    },
+    {
+      "id": "C149",
+      "number": 149,
+      "chapter": "选择题 141-156",
+      "stem": "在补码一位乘（Booth算法）规则中，每次右移采用的是",
+      "options": [
+        {
+          "key": "A",
+          "text": "算术右移"
+        },
+        {
+          "key": "B",
+          "text": "不带进位的循环右移"
+        },
+        {
+          "key": "C",
+          "text": "带进位的循环右移"
+        },
+        {
+          "key": "D",
+          "text": "逻辑右移"
+        }
+      ],
+      "answer": "A",
+      "answerText": "算术右移",
+      "explanation": ""
+    },
+    {
+      "id": "C150",
+      "number": 150,
+      "chapter": "选择题 141-156",
+      "stem": "在计数查询方式下，若每次计数从上一次中止点开始，则（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "设备号大的优先级高"
+        },
+        {
+          "key": "B",
+          "text": "每个设备使用总线的机会相等"
+        },
+        {
+          "key": "C",
+          "text": "设备号小的优先级高"
+        },
+        {
+          "key": "D",
+          "text": "每个设备使用总线的机会无规律"
+        }
+      ],
+      "answer": "B",
+      "answerText": "每个设备使用总线的机会相等",
+      "explanation": ""
+    },
+    {
+      "id": "C151",
+      "number": 151,
+      "chapter": "选择题 141-156",
+      "stem": "相对于微程序控制器,组合逻辑控制器的特点是（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "指令执行速度快,指令功能的修改和扩展难"
+        },
+        {
+          "key": "B",
+          "text": "指令执行速度慢,指令功能的修改和扩展难"
+        },
+        {
+          "key": "C",
+          "text": "指令执行速度快,指令功能的修改和扩展容易"
+        },
+        {
+          "key": "D",
+          "text": "指令执行速度慢,指令功能的修改和扩展容易"
+        }
+      ],
+      "answer": "A",
+      "answerText": "指令执行速度快,指令功能的修改和扩展难",
+      "explanation": ""
+    },
+    {
+      "id": "C152",
+      "number": 152,
+      "chapter": "选择题 141-156",
+      "stem": "Cache的地址映象中（ ）比较多的采用“按内容寻址”的相联存储器来实现。",
+      "options": [
+        {
+          "key": "A",
+          "text": "组相联映象"
+        },
+        {
+          "key": "B",
+          "text": "以上都有"
+        },
+        {
+          "key": "C",
+          "text": "直接映象"
+        },
+        {
+          "key": "D",
+          "text": "全相联映象"
+        }
+      ],
+      "answer": "D",
+      "answerText": "全相联映象",
+      "explanation": ""
+    },
+    {
+      "id": "C153",
+      "number": 153,
+      "chapter": "选择题 141-156",
+      "stem": "浮点数的IEEE754标准对尾数编码采用的是（ ）。",
+      "options": [
+        {
+          "key": "A",
+          "text": "反码"
+        },
+        {
+          "key": "B",
+          "text": "移码"
+        },
+        {
+          "key": "C",
+          "text": "原码"
+        },
+        {
+          "key": "D",
+          "text": "补码"
+        }
+      ],
+      "answer": "C",
+      "answerText": "原码",
+      "explanation": ""
+    },
+    {
+      "id": "C154",
+      "number": 154,
+      "chapter": "选择题 141-156",
+      "stem": "在计数器定时查询的方式下，若每次计数器从0开始，则（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "每个设备使用总线机会相等"
+        },
+        {
+          "key": "B",
+          "text": "以上都不正确"
+        },
+        {
+          "key": "C",
+          "text": "设备号大的优先级高"
+        },
+        {
+          "key": "D",
+          "text": "设备号小的优先级高"
+        }
+      ],
+      "answer": "D",
+      "answerText": "设备号小的优先级高",
+      "explanation": ""
+    },
+    {
+      "id": "C155",
+      "number": 155,
+      "chapter": "选择题 141-156",
+      "stem": "某存储器容量为32K×16位，则（ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "其地址线为32根，数据线为16根"
+        },
+        {
+          "key": "B",
+          "text": "其地址线为15根，数据线为16根"
+        },
+        {
+          "key": "C",
+          "text": "其地址线为16根，数据线为16根"
+        },
+        {
+          "key": "D",
+          "text": "其地址线为16根，数据线为32根"
+        }
+      ],
+      "answer": "B",
+      "answerText": "其地址线为15根，数据线为16根",
+      "explanation": "(其地址线为15根，数据线为16根):乘号前面决定有多少个存储字，乘号后面决定字长是多少"
+    },
+    {
+      "id": "C156",
+      "number": 156,
+      "chapter": "选择题 141-156",
+      "stem": "某机字长32位，首位为符号位，则其源码能表示的则最小负定点整数为 （ ）",
+      "options": [
+        {
+          "key": "A",
+          "text": "-2^30-1"
+        },
+        {
+          "key": "B",
+          "text": "-2^30+1"
+        },
+        {
+          "key": "C",
+          "text": "-2^31-1"
+        },
+        {
+          "key": "D",
+          "text": "-2^31+1"
+        }
+      ],
+      "answer": "C",
+      "answerText": "-2^31-1",
+      "explanation": ""
+    }
+  ]
+};
 
-let cur = null;
-let answeredCount = 0;
-let revealedCount = 0;
-let isRevealed = false;
-let doneSet = new Set(); // 已看过答案的题目ID集合
+const STORE_KEY = "co_quiz_system_v2";
+const DEFAULT_STATE = {
+  mode: "fill",
+  fill: { currentId: null, revealed: [], notes: {} },
+  choice: { currentId: null, answered: {}, selected: {} }
+};
+let state = loadState();
+let currentMode = state.mode || "fill";
+let currentId = null;
+let searchText = "";
 
-function updateSidebarStats() {
-  document.getElementById("doneCount").innerHTML = `已看 <strong>${doneSet.size}</strong> 题`;
-}
+const els = {
+  subline: document.getElementById("subline"),
+  fillCount: document.getElementById("fillCount"),
+  choiceCount: document.getElementById("choiceCount"),
+  tabFill: document.getElementById("tabFill"),
+  tabChoice: document.getElementById("tabChoice"),
+  searchInput: document.getElementById("searchInput"),
+  navList: document.getElementById("navList"),
+  sidebarFoot: document.getElementById("sidebarFoot"),
+  bankTag: document.getElementById("bankTag"),
+  chapterTag: document.getElementById("chapterTag"),
+  stats: document.getElementById("stats"),
+  quizBody: document.getElementById("quizBody"),
+  quizFoot: document.getElementById("quizFoot"),
+  startOverlay: document.getElementById("startOverlay")
+};
 
-/* 导航 */
-function renderNav(f) {
-  const nav = document.getElementById("navList");
-  const grp = {};
-  POOL.forEach(q => { if (!grp[q.ch]) grp[q.ch] = []; grp[q.ch].push(q); });
-  let h = "";
-  for (const [ch, qs] of Object.entries(grp)) {
-    const vis = qs.filter(q => !f || q.q.includes(f) || q.a.includes(f));
-    if (!vis.length && f) continue;
-    h += `<div class="chapter"><div class="chapter-title" onclick="toggleCh(this)"><span class="arrow">▼</span>${ch}<span class="count">${vis.length}/${qs.length}</span></div>`;
-    h += `<div class="chapter-questions" style="max-height:${Math.max(vis.length*56,56)}px">`;
-    qs.forEach(q => {
-      const m = !f || q.q.includes(f) || q.a.includes(f);
-      const act = cur && cur.id===q.id ? " active" : "";
-      const hd = f && !m ? " no-match" : "";
-      const dn = doneSet.has(q.id) ? " done" : "";
-      h += `<div class="q-row${act}${hd}${dn}" onclick="pick(${q.id})" data-id="${q.id}"><span class="q-id">${q.id}</span>${esc(q.q.replace(/_____/g,"…").slice(0,36))}…<span class="q-check">✓</span></div>`;
-    });
-    h += `</div></div>`;
+function loadState() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+    return mergeState(DEFAULT_STATE, parsed || {});
+  } catch (_) {
+    return structuredClone(DEFAULT_STATE);
   }
-  nav.innerHTML = h || `<div style="text-align:center;padding:40px;color:#9ca3af;">无匹配题目</div>`;
 }
-function toggleCh(el) {
-  el.classList.toggle("collapsed");
-  const n = el.nextElementSibling;
-  if (n) n.classList.toggle("collapsed");
+function mergeState(base, extra) {
+  const out = structuredClone(base);
+  if (!extra || typeof extra !== "object") return out;
+  if (extra.mode === "fill" || extra.mode === "choice") out.mode = extra.mode;
+  if (extra.fill) {
+    out.fill.currentId = extra.fill.currentId || null;
+    out.fill.revealed = Array.isArray(extra.fill.revealed) ? extra.fill.revealed : [];
+    out.fill.notes = extra.fill.notes && typeof extra.fill.notes === "object" ? extra.fill.notes : {};
+  }
+  if (extra.choice) {
+    out.choice.currentId = extra.choice.currentId || null;
+    out.choice.answered = extra.choice.answered && typeof extra.choice.answered === "object" ? extra.choice.answered : {};
+    out.choice.selected = extra.choice.selected && typeof extra.choice.selected === "object" ? extra.choice.selected : {};
+  }
+  return out;
 }
-function esc(s) { const d=document.createElement("div");d.textContent=s;return d.innerHTML; }
-
-/* 答题 */
-function render(q) {
-  cur = q; isRevealed = false;
-  document.getElementById("chapterTag").textContent = q.ch;
-  document.getElementById("qNum").textContent = q.id;
-
-  const p = q.q.split("_____");
-  let s = "";
-  p.forEach((t,i) => { s+=esc(t); if(i<p.length-1) s+=`<span class="blank" contenteditable="true" data-blank="${i}"></span>`; });
-  document.getElementById("qStem").innerHTML = s;
-  document.getElementById("userAnswer").value = "";
-  document.getElementById("refBox").classList.remove("show");
-  document.getElementById("refText").textContent = "";
-  document.getElementById("answeredVal").textContent = answeredCount;
-  document.getElementById("revealedVal").textContent = revealedCount;
-
-  document.querySelectorAll(".q-row").forEach(e=>e.classList.remove("active"));
-  const t=document.querySelector(`.q-row[data-id="${q.id}"]`);
-  if(t){t.classList.add("active");t.scrollIntoView({block:"nearest",behavior:"smooth"});}
+function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+function esc(s) {
+  const d = document.createElement("div");
+  d.textContent = s == null ? "" : String(s);
+  return d.innerHTML;
+}
+function bank() { return BANKS[currentMode]; }
+function getCurrentQuestion() { return bank().find(q => q.id === currentId) || bank()[0]; }
+function setMode(mode, showFirstAvailable = false) {
+  currentMode = mode;
+  state.mode = mode;
+  const savedId = state[mode].currentId;
+  currentId = (!showFirstAvailable && savedId && BANKS[mode].some(q => q.id === savedId)) ? savedId : BANKS[mode][0].id;
+  state[mode].currentId = currentId;
+  els.searchInput.value = "";
+  searchText = "";
+  saveState();
+  renderAll();
+}
+function setQuestion(id) {
+  if (!bank().some(q => q.id === id)) return;
+  currentId = id;
+  state[currentMode].currentId = id;
+  saveState();
+  renderAll(false);
+}
+function nextQuestion() {
+  const list = bank();
+  const idx = list.findIndex(q => q.id === currentId);
+  setQuestion(list[(idx + 1 + list.length) % list.length].id);
+}
+function randomQuestion() {
+  const list = bank();
+  if (list.length <= 1) return setQuestion(list[0].id);
+  let next = currentId;
+  while (next === currentId) next = list[Math.floor(Math.random() * list.length)].id;
+  setQuestion(next);
+}
+function groupByChapter(items) {
+  return items.reduce((acc, q) => {
+    if (!acc[q.chapter]) acc[q.chapter] = [];
+    acc[q.chapter].push(q);
+    return acc;
+  }, {});
+}
+function matches(q, term) {
+  if (!term) return true;
+  const hay = currentMode === "fill"
+    ? `${q.stem} ${q.answer} ${q.chapter}`
+    : `${q.stem} ${q.answer} ${q.answerText} ${q.explanation} ${q.options.map(o => o.text).join(" ")} ${q.chapter}`;
+  return hay.toLowerCase().includes(term.toLowerCase());
+}
+function summarizeStem(q) {
+  const s = q.stem.replace(/_____/g, "□").replace(/\s+/g, " ");
+  return s.length > 44 ? s.slice(0, 44) + "..." : s;
+}
+function renderAll(scrollActive = true) {
+  els.fillCount.textContent = `${BANKS.fill.length}题`;
+  els.choiceCount.textContent = `${BANKS.choice.length}题`;
+  els.tabFill.classList.toggle("active", currentMode === "fill");
+  els.tabChoice.classList.toggle("active", currentMode === "choice");
+  renderNav(scrollActive);
+  renderQuiz();
+  renderStats();
+}
+function renderNav(scrollActive = true) {
+  const grouped = groupByChapter(bank());
+  const term = searchText.trim();
+  let html = "";
+  for (const [chapter, qs] of Object.entries(grouped)) {
+    const visible = qs.filter(q => matches(q, term));
+    if (!visible.length) continue;
+    html += `<section class="chapter"><div class="chapter-title" data-toggle><span class="chapter-arrow">▾</span><span>${esc(chapter)}</span><span class="count">${visible.length}/${qs.length}</span></div><div class="question-list">`;
+    visible.forEach(q => {
+      const active = q.id === currentId ? " active" : "";
+      let rowClass = "";
+      let status = "";
+      if (currentMode === "fill" && state.fill.revealed.includes(q.id)) { rowClass = " done"; status = `<span class="q-status fill">已看</span>`; }
+      if (currentMode === "choice" && state.choice.answered[q.id]) {
+        const ok = state.choice.answered[q.id].correct;
+        rowClass = ok ? " correct" : " wrong";
+        status = `<span class="q-status ${ok ? "correct" : "wrong"}">${ok ? "正确" : "错题"}</span>`;
+      }
+      html += `<button class="q-row${active}${rowClass}" type="button" data-id="${q.id}"><span class="q-id">${q.number}</span><span>${esc(summarizeStem(q))}</span>${status}</button>`;
+    });
+    html += `</div></section>`;
+  }
+  els.navList.innerHTML = html || `<div class="empty">没有匹配的题目</div>`;
+  els.navList.querySelectorAll(".q-row").forEach(btn => btn.addEventListener("click", () => setQuestion(btn.dataset.id)));
+  els.navList.querySelectorAll("[data-toggle]").forEach(title => title.addEventListener("click", () => title.closest(".chapter").classList.toggle("collapsed")));
+  if (scrollActive) els.navList.querySelector(".q-row.active")?.scrollIntoView({ block: "nearest" });
+}
+function renderStats() {
+  if (currentMode === "fill") {
+    const revealed = state.fill.revealed.length;
+    els.subline.innerHTML = `<span>填空题库</span><span>${revealed}/${BANKS.fill.length} 已查看答案</span>`;
+    els.stats.innerHTML = `<span class="stat">已看 <b>${revealed}</b></span><span class="stat">剩余 <b>${BANKS.fill.length - revealed}</b></span>`;
+    els.sidebarFoot.innerHTML = `<span>共 <strong>${BANKS.fill.length}</strong> 题</span><span>已看 <strong>${revealed}</strong> 题</span>`;
+  } else {
+    const answered = Object.values(state.choice.answered);
+    const correct = answered.filter(x => x.correct).length;
+    const wrong = answered.length - correct;
+    els.subline.innerHTML = `<span>选择题库</span><span>${answered.length}/${BANKS.choice.length} 已作答</span>`;
+    els.stats.innerHTML = `<span class="stat">已答 <b>${answered.length}</b></span><span class="stat">正确 <b>${correct}</b></span><span class="stat">错误 <b>${wrong}</b></span>`;
+    els.sidebarFoot.innerHTML = `<span>共 <strong>${BANKS.choice.length}</strong> 题</span><span>正确 <strong>${correct}</strong></span><span>错误 <strong>${wrong}</strong></span>`;
+  }
+}
+function renderQuiz() {
+  const q = getCurrentQuestion();
+  currentId = q.id;
+  state[currentMode].currentId = q.id;
+  els.bankTag.textContent = currentMode === "fill" ? "填空题" : "选择题";
+  els.chapterTag.textContent = q.chapter;
+  if (currentMode === "fill") renderFill(q); else renderChoice(q);
+}
+function renderStemWithBlanks(stem) {
+  return esc(stem).replace(/_____/g, `<span class="blank-line"></span>`);
+}
+function splitAnswerByBlankCount(q) {
+  const blankCount = (q.stem.match(/_____/g) || []).length;
+  if (blankCount <= 1) return [q.answer];
+  const parts = q.answer.split("、").map(x => x.trim()).filter(Boolean);
+  return parts.length === blankCount ? parts : [q.answer];
+}
+function renderAnswer(q) {
+  const parts = splitAnswerByBlankCount(q);
+  if (parts.length === 1) return `<div class="answer-single">${esc(parts[0])}</div>`;
+  return `<ol class="answer-list">${parts.map(part => `<li>${esc(part)}</li>`).join("")}</ol>`;
+}
+function renderFill(q) {
+  const isShown = state.fill.revealed.includes(q.id);
+  const note = state.fill.notes[q.id] || "";
+  els.quizBody.innerHTML = `
+    <h2 class="qnum">第 <span>${q.number}</span> 题</h2>
+    <div class="stem">${renderStemWithBlanks(q.stem)}</div>
+    <div class="answer-box">
+      <label for="fillNote">你的答案</label>
+      <textarea id="fillNote" placeholder="可以在这里写自己的答案，切换题型后会保留。">${esc(note)}</textarea>
+    </div>
+    <div class="ref-box ${isShown ? "show" : ""}" id="refBox">
+      <div class="box-label">参考答案</div>
+      ${renderAnswer(q)}
+    </div>`;
+  els.quizFoot.innerHTML = `
+    <span class="kbd-hint"><kbd>Space</kbd> 查看答案　<kbd>→</kbd> 下一题</span>
+    <button class="btn btn-plain" type="button" id="btnReset">重置填空进度</button>
+    <button class="btn btn-secondary" type="button" id="btnReveal">查看答案</button>
+    <button class="btn btn-secondary" type="button" id="btnNext">下一题</button>
+    <button class="btn btn-primary" type="button" id="btnRandom">随机抽题</button>`;
+  document.getElementById("fillNote").addEventListener("input", e => {
+    state.fill.notes[q.id] = e.target.value;
+    saveState();
+  });
+  document.getElementById("btnReveal").addEventListener("click", () => revealFill(q.id));
+  bindCommonButtons("fill");
+}
+function revealFill(id) {
+  if (!state.fill.revealed.includes(id)) state.fill.revealed.push(id);
+  saveState();
+  renderAll(false);
+}
+function renderChoice(q) {
+  const selected = state.choice.selected[q.id] || "";
+  const result = state.choice.answered[q.id] || null;
+  const locked = Boolean(result);
+  const answerLine = result ? `正确答案：${q.answer}. ${q.answerText || q.options.find(o => o.key === q.answer)?.text || ""}` : "";
+  const explain = q.explanation ? `<div style="margin-top:6px;color:#475467;">${esc(q.explanation)}</div>` : "";
+  els.quizBody.innerHTML = `
+    <h2 class="qnum">第 <span>${q.number}</span> 题</h2>
+    <div class="stem">${esc(q.stem)}</div>
+    <div class="choice-options">
+      ${q.options.map(opt => {
+        const cls = ["option"];
+        if (selected === opt.key) cls.push("selected");
+        if (locked && opt.key === q.answer) cls.push("correct");
+        if (locked && selected === opt.key && opt.key !== q.answer) cls.push("wrong");
+        return `<button class="${cls.join(" ")}" type="button" data-option="${opt.key}" ${locked ? "disabled" : ""}><span class="option-key">${opt.key}</span><span>${esc(opt.text)}</span></button>`;
+      }).join("")}
+    </div>
+    <div class="result-box ${result ? "show " + (result.correct ? "correct" : "wrong") : ""}" id="resultBox">
+      <div class="box-label">${result ? (result.correct ? "回答正确" : "回答错误") : ""}</div>
+      <div>${esc(answerLine)}</div>${explain}
+    </div>`;
+  els.quizFoot.innerHTML = `
+    <span class="kbd-hint"><kbd>Enter</kbd> 提交　<kbd>→</kbd> 下一题</span>
+    <button class="btn btn-plain" type="button" id="btnReset">重置选择进度</button>
+    ${locked ? `<button class="btn btn-secondary" type="button" id="btnRetry">重新作答</button>` : `<button class="btn btn-primary" type="button" id="btnSubmit" ${selected ? "" : "disabled"}>提交判断</button>`}
+    <button class="btn btn-secondary" type="button" id="btnNext">下一题</button>
+    <button class="btn btn-primary" type="button" id="btnRandom">随机抽题</button>`;
+  els.quizBody.querySelectorAll("[data-option]").forEach(btn => btn.addEventListener("click", () => selectChoice(q.id, btn.dataset.option)));
+  document.getElementById("btnSubmit")?.addEventListener("click", () => submitChoice(q.id));
+  document.getElementById("btnRetry")?.addEventListener("click", () => retryChoice(q.id));
+  bindCommonButtons("choice");
+}
+function selectChoice(id, key) {
+  if (state.choice.answered[id]) return;
+  state.choice.selected[id] = key;
+  saveState();
+  renderAll(false);
+}
+function submitChoice(id) {
+  const q = BANKS.choice.find(x => x.id === id);
+  const selected = state.choice.selected[id];
+  if (!q || !selected) return;
+  state.choice.answered[id] = { selected, correct: selected === q.answer, at: Date.now() };
+  saveState();
+  renderAll(false);
+}
+function retryChoice(id) {
+  delete state.choice.answered[id];
+  delete state.choice.selected[id];
+  saveState();
+  renderAll(false);
+}
+function bindCommonButtons(kind) {
+  document.getElementById("btnNext").addEventListener("click", nextQuestion);
+  document.getElementById("btnRandom").addEventListener("click", randomQuestion);
+  document.getElementById("btnReset").addEventListener("click", () => resetProgress(kind));
+}
+function resetProgress(kind) {
+  if (kind === "fill") {
+    state.fill.revealed = [];
+    state.fill.notes = {};
+  } else {
+    state.choice.answered = {};
+    state.choice.selected = {};
+  }
+  saveState();
+  renderAll(false);
 }
 
-function pick(id) { const q = POOL.find(x=>x.id===id); if(q) render(q); }
-
-/* 随机抽题 */
-function rand() { render(POOL[Math.floor(Math.random()*POOL.length)]); }
-
-/* 顺序下一题 */
-function nextInOrder() {
-  if (!cur) { rand(); return; }
-  const idx = POOL.findIndex(x => x.id === cur.id);
-  const nextIdx = (idx + 1) % POOL.length;
-  render(POOL[nextIdx]);
-}
-
-/* 查看答案 */
-function revealAns() {
-  if(!cur) return;
-  if(!isRevealed){revealedCount++;isRevealed=true;}
-  answeredCount++;
-  // 标记已看
-  doneSet.add(cur.id);
-  updateSidebarStats();
-  document.getElementById("revealedVal").textContent=revealedCount;
-  document.getElementById("answeredVal").textContent=answeredCount;
-  document.getElementById("refText").textContent=cur.a;
-  document.getElementById("refBox").classList.add("show");
-  // 刷新导航里的勾
-  renderNav(document.getElementById("searchInput").value);
-  // 重新高亮当前题
-  const t=document.querySelector(`.q-row[data-id="${cur.id}"]`);
-  if(t) t.classList.add("active");
-}
-
-/* 绑定 */
-document.getElementById("btnRandom").addEventListener("click",rand);
-document.getElementById("btnNext").addEventListener("click",nextInOrder);
-document.getElementById("btnReveal").addEventListener("click",revealAns);
-document.getElementById("btnReset").addEventListener("click",()=>{
-  answeredCount=0;revealedCount=0;isRevealed=false;
-  doneSet.clear(); updateSidebarStats();
-  document.getElementById("answeredVal").textContent="0";
-  document.getElementById("revealedVal").textContent="0";
-  if(cur) render(cur);
-  renderNav(document.getElementById("searchInput").value);
-  if(cur){const t=document.querySelector(`.q-row[data-id="${cur.id}"]`);if(t)t.classList.add("active");}
+els.tabFill.addEventListener("click", () => setMode("fill"));
+els.tabChoice.addEventListener("click", () => setMode("choice"));
+els.searchInput.addEventListener("input", e => { searchText = e.target.value; renderNav(false); });
+els.startOverlay.querySelectorAll("[data-start]").forEach(btn => btn.addEventListener("click", () => {
+  els.startOverlay.style.display = "none";
+  setMode(btn.dataset.start);
+}));
+document.addEventListener("keydown", event => {
+  const tag = document.activeElement?.tagName;
+  if (tag === "TEXTAREA" || tag === "INPUT") return;
+  if (event.key === "ArrowRight") { event.preventDefault(); nextQuestion(); }
+  if (event.key === " " && currentMode === "fill") { event.preventDefault(); revealFill(currentId); }
+  if (event.key === "Enter" && currentMode === "choice") { event.preventDefault(); submitChoice(currentId); }
 });
-document.getElementById("searchInput").addEventListener("input",e=>renderNav(e.target.value));
-document.addEventListener("keydown",e=>{
-  if(e.key==="ArrowRight"&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&document.activeElement===document.body){e.preventDefault();nextInOrder();}
-  if(e.key===" "&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&document.activeElement===document.body){e.preventDefault();revealAns();}
-});
 
-renderNav(); rand();
+if (!state.fill.currentId) state.fill.currentId = BANKS.fill[0].id;
+if (!state.choice.currentId) state.choice.currentId = BANKS.choice[0].id;
+currentId = state[currentMode].currentId;
+renderAll();
 </script>
 </body>
 </html>
