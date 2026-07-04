@@ -92,6 +92,22 @@ textarea:focus-visible {
   box-shadow: 18px 0 70px rgba(0,0,0,.28);
   backdrop-filter: blur(24px);
 }
+.mobile-dock { display: none; }
+.mobile-dock-main { min-width: 0; display: grid; gap: 3px; }
+.mobile-dock-main strong { color: #f7f8fc; font-size: 14px; line-height: 1.2; }
+.mobile-dock-main span { color: rgba(239,242,252,.66); font-size: 12px; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mobile-dock-main small { color: rgba(239,242,252,.44); font-size: 11px; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mobile-toggle {
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid rgba(255,255,255,.56);
+  border-radius: 8px;
+  background: linear-gradient(135deg, #fff5fb, var(--sakura) 48%, var(--cyan));
+  color: #061018;
+  font-size: 13px;
+  font-weight: 900;
+  box-shadow: 0 12px 28px rgba(255,122,184,.18);
+}
 .sidebar-head { padding: 20px 20px 13px; border-bottom: 1px solid var(--line); }
 .title-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 h1 { margin: 0; color: #f7f8fc; font-size: 18px; line-height: 1.3; letter-spacing: 0; text-shadow: 0 0 24px rgba(255,122,184,.2); }
@@ -313,21 +329,77 @@ kbd { font-family: var(--font); border: 1px solid var(--line); background: #f8fa
 .start-card span { color: var(--muted); font-size: 13px; line-height: 1.65; }
 .start-card b { color: #c23778; }
 @media (max-width: 900px) {
-  body { grid-template-columns: 1fr; grid-template-rows: minmax(330px, 42vh) 1fr; overflow: auto; }
-  .sidebar { height: auto; min-height: 330px; }
-  .main { height: auto; min-height: 58vh; padding: 16px; }
+  body {
+    height: 100svh;
+    min-height: 100svh;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+  }
+  .sidebar {
+    height: auto;
+    min-height: 0;
+    max-height: min(82svh, 720px);
+    grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
+    overflow: hidden;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 24px 70px rgba(0,0,0,.42);
+    transition: max-height .22s ease, box-shadow .22s ease;
+  }
+  .mobile-dock {
+    min-height: 72px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(90deg, rgba(255,122,184,.1), rgba(114,231,255,.055));
+  }
+  .nav-list {
+    min-height: 0;
+    max-height: none;
+    overscroll-behavior: contain;
+  }
+  .main {
+    height: auto;
+    min-height: 0;
+    overflow: auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 12px;
+  }
   .main::before { display: none; }
+  .quiz-card { margin: 0 auto 16px; }
   .quiz-head { align-items: flex-start; flex-direction: column; }
   .stats { justify-content: flex-start; }
+  body.nav-collapsed .sidebar {
+    max-height: 72px;
+    box-shadow: 0 12px 42px rgba(0,0,0,.24);
+  }
+  body.nav-collapsed .sidebar-head,
+  body.nav-collapsed .mode-tabs,
+  body.nav-collapsed .search-wrap,
+  body.nav-collapsed .nav-list,
+  body.nav-collapsed .sidebar-foot {
+    display: none;
+  }
 }
 @media (max-width: 620px) {
-  body { grid-template-rows: minmax(360px, 48vh) 1fr; }
+  body { grid-template-rows: auto minmax(0, 1fr); }
+  .sidebar { max-height: 86svh; }
+  .mobile-dock { padding-left: 12px; padding-right: 12px; }
+  .mobile-toggle { padding: 0 11px; }
   .sidebar-head, .mode-tabs, .search-wrap, .sidebar-foot { padding-left: 14px; padding-right: 14px; }
   .q-row { padding-left: 22px; padding-right: 14px; }
   .chapter-title { padding-left: 14px; padding-right: 14px; }
-  .quiz-body { padding: 22px 18px 18px; }
-  .quiz-foot { padding: 0 18px 20px; }
+  .main { padding: 8px 6px 12px; }
+  .quiz-head { padding: 12px 18px; gap: 10px; }
+  .quiz-body { padding: 20px 18px 16px; }
+  .quiz-foot { padding: 0 18px 18px; }
   .qnum { font-size: 24px; }
+  .stem { line-height: 1.75; }
   .start-grid { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -342,6 +414,14 @@ kbd { font-family: var(--font); border: 1px solid var(--line); background: #f8fa
 </head>
 <body>
 <aside class="sidebar">
+  <div class="mobile-dock">
+    <div class="mobile-dock-main">
+      <strong id="mobileMode">填空题</strong>
+      <span id="mobileSummary">0/43 已查看答案</span>
+      <small id="mobileChapter">第一章 计算机系统概论</small>
+    </div>
+    <button class="mobile-toggle" id="btnToggleNav" type="button" aria-expanded="false" aria-controls="navList">展开题库</button>
+  </div>
   <div class="sidebar-head">
     <div class="title-row">
       <h1>计算机组成原理题库</h1>
@@ -4911,6 +4991,7 @@ const BANKS = {
 };
 
 const STORE_KEY = "co_quiz_system_v2";
+const NAV_COLLAPSED_KEY = "co_quiz_mobile_nav_collapsed";
 const DEFAULT_STATE = {
   mode: "fill",
   fill: { currentId: null, revealed: [], notes: {} },
@@ -4920,9 +5001,15 @@ let state = loadState();
 let currentMode = state.mode || "fill";
 let currentId = null;
 let searchText = "";
+let navCollapsed = loadNavCollapsed();
+const mobileNavQuery = window.matchMedia("(max-width: 900px)");
 
 const els = {
   subline: document.getElementById("subline"),
+  mobileMode: document.getElementById("mobileMode"),
+  mobileSummary: document.getElementById("mobileSummary"),
+  mobileChapter: document.getElementById("mobileChapter"),
+  btnToggleNav: document.getElementById("btnToggleNav"),
   fillCount: document.getElementById("fillCount"),
   choiceCount: document.getElementById("choiceCount"),
   tabFill: document.getElementById("tabFill"),
@@ -4946,6 +5033,14 @@ function loadState() {
     return structuredClone(DEFAULT_STATE);
   }
 }
+function loadNavCollapsed() {
+  try {
+    const saved = localStorage.getItem(NAV_COLLAPSED_KEY);
+    return saved == null ? true : saved !== "false";
+  } catch (_) {
+    return true;
+  }
+}
 function mergeState(base, extra) {
   const out = structuredClone(base);
   if (!extra || typeof extra !== "object") return out;
@@ -4963,6 +5058,11 @@ function mergeState(base, extra) {
   return out;
 }
 function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+function saveNavCollapsed() {
+  try {
+    localStorage.setItem(NAV_COLLAPSED_KEY, navCollapsed ? "true" : "false");
+  } catch (_) {}
+}
 function esc(s) {
   const d = document.createElement("div");
   d.textContent = s == null ? "" : String(s);
@@ -4970,6 +5070,32 @@ function esc(s) {
 }
 function bank() { return BANKS[currentMode]; }
 function getCurrentQuestion() { return bank().find(q => q.id === currentId) || bank()[0]; }
+function isMobileNav() { return mobileNavQuery.matches; }
+function setNavCollapsed(collapsed, persist = true) {
+  navCollapsed = collapsed;
+  document.body.classList.toggle("nav-collapsed", collapsed);
+  els.btnToggleNav.setAttribute("aria-expanded", collapsed ? "false" : "true");
+  els.btnToggleNav.textContent = collapsed ? "展开题库" : "收起题库";
+  if (persist) saveNavCollapsed();
+  renderMobileDock();
+}
+function collapseNavOnMobile() {
+  if (isMobileNav()) setNavCollapsed(true);
+}
+function renderMobileDock() {
+  const q = getCurrentQuestion();
+  const modeText = currentMode === "fill" ? "填空题" : "选择题";
+  els.mobileMode.textContent = `${modeText} · 第 ${q.number} 题`;
+  els.mobileChapter.textContent = q.chapter;
+  if (currentMode === "fill") {
+    const revealed = state.fill.revealed.length;
+    els.mobileSummary.textContent = `${revealed}/${BANKS.fill.length} 已查看答案`;
+  } else {
+    const answered = Object.values(state.choice.answered);
+    const correct = answered.filter(x => x.correct).length;
+    els.mobileSummary.textContent = `${answered.length}/${BANKS.choice.length} 已答 · 正确 ${correct}`;
+  }
+}
 function setMode(mode, showFirstAvailable = false) {
   currentMode = mode;
   state.mode = mode;
@@ -4980,6 +5106,7 @@ function setMode(mode, showFirstAvailable = false) {
   searchText = "";
   saveState();
   renderAll();
+  collapseNavOnMobile();
 }
 function setQuestion(id) {
   if (!bank().some(q => q.id === id)) return;
@@ -4987,6 +5114,7 @@ function setQuestion(id) {
   state[currentMode].currentId = id;
   saveState();
   renderAll(false);
+  collapseNavOnMobile();
 }
 function nextQuestion() {
   const list = bank();
@@ -5026,6 +5154,7 @@ function renderAll(scrollActive = true) {
   renderNav(scrollActive);
   renderQuiz();
   renderStats();
+  renderMobileDock();
 }
 function renderNav(scrollActive = true) {
   const grouped = groupByChapter(bank());
@@ -5195,6 +5324,7 @@ function resetProgress(kind) {
 
 els.tabFill.addEventListener("click", () => setMode("fill"));
 els.tabChoice.addEventListener("click", () => setMode("choice"));
+els.btnToggleNav.addEventListener("click", () => setNavCollapsed(!navCollapsed));
 els.searchInput.addEventListener("input", e => { searchText = e.target.value; renderNav(false); });
 els.startOverlay.querySelectorAll("[data-start]").forEach(btn => btn.addEventListener("click", () => {
   els.startOverlay.style.display = "none";
@@ -5211,6 +5341,12 @@ document.addEventListener("keydown", event => {
 if (!state.fill.currentId) state.fill.currentId = BANKS.fill[0].id;
 if (!state.choice.currentId) state.choice.currentId = BANKS.choice[0].id;
 currentId = state[currentMode].currentId;
+if (typeof mobileNavQuery.addEventListener === "function") {
+  mobileNavQuery.addEventListener("change", () => setNavCollapsed(navCollapsed, false));
+} else {
+  mobileNavQuery.addListener(() => setNavCollapsed(navCollapsed, false));
+}
+setNavCollapsed(navCollapsed, false);
 renderAll();
 </script>
 </body>
